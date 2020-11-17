@@ -7,7 +7,6 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="description_id"/>
         </constraint>
-        <constraint xsi:type="foreign" table="allow_add_description"
-                    column="customer_email" referenceTable="customer_entity" referenceColumn="email" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="ALLOW_ADD_DESCRIPTION_CUSTOMER_EMAIL_CUSTOMER_ENTITY_EMAIL" table="allow_add_description" column="customer_email" referenceTable="customer_entity" referenceColumn="email" onDelete="CASCADE"/>
     </table>
 </schema>

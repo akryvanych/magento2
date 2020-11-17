@@ -46,13 +46,12 @@ class Provider implements CustomDescriptionsProviderInterface
     public function getDescriptions(string $customerEmail)
     {
         $customDescriptions = [];
-        $emails = $this->loader->getCustomersByCustomerEmails($customerEmail);
+        $ids = $this->loader->getCustomersByCustomerEmails($customerEmail);
 
-        foreach ($emails as $email) {
+        foreach ($ids as $id) {
             $customDescription = $this->customDescriptionFactory->create();
-            $customDescriptions[] = $this->entityManager->load($customDescription, $email);
+            $customDescriptions[] = $this->entityManager->load($customDescription, $id);
         }
-
         return $customDescriptions;
     }
 }

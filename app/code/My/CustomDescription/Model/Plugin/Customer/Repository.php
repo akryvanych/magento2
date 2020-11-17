@@ -58,8 +58,7 @@ class Repository
     ) {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         foreach ($searchResult->getItems() as $customer) {
-            var_dump($this->addDescriptionsToCustomer($customer));
-            die;
+            $this->addDescriptionsToCustomer($customer);
         }
 
         return $searchResult;
@@ -159,7 +158,6 @@ class Repository
         $customDescriptions = $this->customDescriptionsProvider->getDescriptions($customer->getEmail());
         $extensionAttributes->setCustomDescriptions($customDescriptions);
         $customer->setExtensionAttributes($extensionAttributes);
-
         return $this;
     }
 }

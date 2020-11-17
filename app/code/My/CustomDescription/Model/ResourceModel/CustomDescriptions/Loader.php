@@ -48,9 +48,9 @@ class Loader
         $select = $connection
             ->select()
             ->from($metadata->getEntityTable(), CustomDescriptionInterface::DESCRIPTION_ID)
-            ->where(CustomDescriptionInterface::CUSTOMER_EMAIL . ' = ?', $customerEmail);
-        $emails = $connection->fetchCol($select);
-
-        return $emails ?: [];
+            ->where(CustomDescriptionInterface::CUSTOMER_EMAIL . ' = ?', $customerEmail)
+            ->where(CustomDescriptionInterface::IS_ALLOWED_DESCRIPTION . ' = ?', '1');
+        $ids = $connection->fetchCol($select);
+        return $ids ?: [];
     }
 }
