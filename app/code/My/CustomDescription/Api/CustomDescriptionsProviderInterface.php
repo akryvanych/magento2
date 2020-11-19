@@ -10,5 +10,5 @@ interface CustomDescriptionsProviderInterface
      * @param string $customerEmail
      * @return array
      */
-    public function getDescriptions(string $customerEmail);
+    public function getDescriptions(string $customerEmail): array;
 }

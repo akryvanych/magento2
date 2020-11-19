@@ -1,11 +1,25 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <columns name="customer_columns" class="Magento\Customer\Ui\Component\Listing\Columns">
-        <column name="description" sortOrder="30">
-            <settings>
-                <filter>text</filter>
-                <label translate="true">Description</label>
-            </settings>
+        <column name="is_allowed_description" sortOrder="30">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="options" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="value" xsi:type="string">0</item>
+                            <item name="label" xsi:type="string">No</item>
+                        </item>
+                        <item name="1" xsi:type="array">
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="label" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="editor" xsi:type="string">select</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Is Allowed Description</item>
+                </item>
+            </argument>
         </column>
     </columns>
 </listing>

@@ -6,9 +6,20 @@
                 type="My\CustomDescription\Model\CustomDescription"/>
     <preference for="My\CustomDescription\Api\CustomDescriptionsProviderInterface"
                 type="My\CustomDescription\Model\CustomDescriptions\Provider"/>
+    <type name="Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses">
+        <plugin name="joinAfterGetData"
+                type="My\CustomDescription\Plugin\GetIsAllowAddDescriptionPlugin"/>
+    </type>
+    <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
+        <plugin name="joinAfterSave"
+                type="My\CustomDescription\Plugin\SetIsAllowAddDescriptionPlugin"/>
+    </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="joinCustomDescriptionToCustomer"
                 type="My\CustomDescription\Model\Plugin\Customer\Repository"/>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <plugin name="grid_custom_column" type="My\CustomDescription\Plugin\GridJoinCollection" sortOrder="5" />
     </type>
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>

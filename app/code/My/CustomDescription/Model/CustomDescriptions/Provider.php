@@ -28,6 +28,7 @@ class Provider implements CustomDescriptionsProviderInterface
      * Provider constructor.
      * @param EntityManager $entityManager
      * @param Loader $loader
+     * @param CustomDescriptionFactory $customDescriptionFactory
      */
     public function __construct(
         EntityManager $entityManager,
@@ -43,7 +44,7 @@ class Provider implements CustomDescriptionsProviderInterface
      * @inheritdoc
      * @throws \Exception
      */
-    public function getDescriptions(string $customerEmail)
+    public function getDescriptions(string $customerEmail): array
     {
         $customDescriptions = [];
         $ids = $this->loader->getCustomersByCustomerEmails($customerEmail);
