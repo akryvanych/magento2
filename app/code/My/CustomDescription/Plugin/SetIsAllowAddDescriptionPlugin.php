@@ -70,10 +70,10 @@ class SetIsAllowAddDescriptionPlugin
      * @param array $data
      * @return mixed
      */
-    public function afterSave(CustomerRepository $subject, array $data)
+    public function afterSave(CustomerRepository $subject, $data)
     {
+        $customerEmail = $data->getExtensionAttributes()->getCustomDescriptions()[0]->getCustomerEmail();
         $connection = $this->resourceConnection->getConnection();
-        $customerEmail = (string)$this->request->getParam('customer_email');
         $customerExtraAttributesObject = $this->customDescriptionsProvider->getDescriptions($customerEmail);
         if (!empty($customerExtraAttributesObject)) {
             $customerExtraAttributes = $this->dataObjectConverter->toFlatArray($customerExtraAttributesObject[0], []);

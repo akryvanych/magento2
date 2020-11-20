@@ -9,7 +9,7 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
 {
 
     /** @var  array  */
-    protected $extensionAttributes;
+    public $extensionAttributes;
 
     /**
      * @inheritdoc

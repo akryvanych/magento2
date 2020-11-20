@@ -40,7 +40,7 @@ class Loader
      * @return array
      * @throws \Exception
      */
-    public function getCustomersByCustomerEmails($customerEmail)
+    public function getCustomersByCustomerEmails(string $customerEmail): array
     {
         $metadata = $this->metadataPool->getMetadata(CustomDescriptionInterface::class);
         $connection = $this->resourceConnection->getConnection();
@@ -48,8 +48,8 @@ class Loader
         $select = $connection
             ->select()
             ->from($metadata->getEntityTable(), CustomDescriptionInterface::DESCRIPTION_ID)
-            ->where(CustomDescriptionInterface::CUSTOMER_EMAIL . ' = ?', $customerEmail)
-            ->where(CustomDescriptionInterface::IS_ALLOWED_DESCRIPTION . ' = ?', '1');
+            ->where(CustomDescriptionInterface::CUSTOMER_EMAIL . ' = ?', $customerEmail);
+//            ->where(CustomDescriptionInterface::IS_ALLOWED_DESCRIPTION . ' = ?', '1');
         $ids = $connection->fetchCol($select);
         return $ids ?: [];
     }
