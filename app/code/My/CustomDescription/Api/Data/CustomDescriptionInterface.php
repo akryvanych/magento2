@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace My\CustomDescription\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 interface CustomDescriptionInterface extends ExtensibleDataInterface
 {
-    const DESCRIPTION_ID = 'description_id';
+    public const DESCRIPTION_ID = 'description_id';
 
-    const DESCRIPTION = 'description';
+    public const DESCRIPTION = 'description';
 
-    const CUSTOMER_EMAIL = 'customer_email';
+    public const CUSTOMER_EMAIL = 'customer_email';
 
-    const IS_ALLOWED_DESCRIPTION = 'is_allowed_description';
+    public const IS_ALLOWED_DESCRIPTION = 'is_allowed_description';
 
 
     /**
@@ -20,7 +22,7 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
      * @param int $descriptionId
      * @return self
      */
-    public function setDescriptionId($descriptionId);
+    public function setDescriptionId(int $descriptionId);
 
     /**
      * Get Description Id
@@ -30,27 +32,12 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
     public function getDescriptionId();
 
     /**
-     * Set Description
-     *
-     * @param string $description
-     * @return self
-     */
-    public function setDescription($description);
-
-    /**
-     * Get Description
-     *
-     * @return string
-     */
-    public function getDescription();
-
-    /**
      * Set Customer Email
      *
      * @param string $customerEmail
      * @return self
      */
-    public function setCustomerEmail($customerEmail);
+    public function setCustomerEmail(string $customerEmail);
 
     /**
      * Get Customer Email
@@ -65,7 +52,7 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
      * @param bool $isAllowedDescription
      * @return self
      */
-    public function setIsAllowedDescription($isAllowedDescription);
+    public function setIsAllowedDescription(bool $isAllowedDescription);
 
     /**
      * Get Is Allowed
@@ -75,15 +62,13 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
     public function getIsAllowedDescription();
 
     /**
-     * @return \My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface|null
+     * @return CustomDescriptionExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
-     * @param \My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface $extensionAttributes
+     * @param CustomDescriptionExtensionInterface $extensionAttributes
      * @return self
      */
-    public function setExtensionAttributes(
-        \My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface $extensionAttributes
-    );
+    public function setExtensionAttributes(CustomDescriptionExtensionInterface $extensionAttributes);
 }

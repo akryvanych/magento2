@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace My\CustomDescription\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -15,14 +17,6 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function setDescriptionId($descriptionId)
-    {
-        return $this->setData(self::DESCRIPTION_ID, $descriptionId);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getDescriptionId()
     {
         return $this->getData(self::DESCRIPTION_ID);
@@ -31,9 +25,9 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function setDescription($description)
+    public function setDescriptionId(int $descriptionId): CustomDescriptionInterface
     {
-        return $this->setData(self::DESCRIPTION, $description);
+        return $this->setData(self::DESCRIPTION_ID, $descriptionId);
     }
 
     /**
@@ -47,9 +41,9 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function setCustomerEmail($customerEmail)
+    public function setDescription(string $description): CustomDescriptionInterface
     {
-        return $this->setData(self::CUSTOMER_EMAIL, $customerEmail);
+        return $this->setData(self::DESCRIPTION, $description);
     }
 
     /**
@@ -63,9 +57,9 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function setIsAllowedDescription($isAllowedDescription)
+    public function setCustomerEmail(string $customerEmail): CustomDescriptionInterface
     {
-        return $this->setData(self::IS_ALLOWED_DESCRIPTION, $isAllowedDescription);
+        return $this->setData(self::CUSTOMER_EMAIL, $customerEmail);
     }
 
     /**
@@ -79,11 +73,9 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(
-        CustomDescriptionExtensionInterface $extensionAttributes
-    ) {
-        $this->extensionAttributes = $extensionAttributes;
-        return $this;
+    public function setIsAllowedDescription(bool $isAllowedDescription): CustomDescriptionInterface
+    {
+        return $this->setData(self::IS_ALLOWED_DESCRIPTION, $isAllowedDescription);
     }
 
     /**
@@ -92,5 +84,14 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     public function getExtensionAttributes()
     {
         return $this->extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(CustomDescriptionExtensionInterface $extensionAttributes)
+    {
+        $this->extensionAttributes = $extensionAttributes;
+        return $this;
     }
 }

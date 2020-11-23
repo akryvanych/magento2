@@ -1,8 +1,4 @@
 <?php
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
 
 declare(strict_types=1);
 
@@ -15,7 +11,6 @@ use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 
 /**
  * Class Loader
- * @package My\CustomDescription\Model\CustomDescriptions
  */
 class Loader
 {
@@ -26,7 +21,6 @@ class Loader
     private $resourceConnection;
 
     /**
-     * Loader constructor.
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      */
@@ -53,6 +47,7 @@ class Loader
             ->from($metadata->getEntityTable(), CustomDescriptionInterface::DESCRIPTION_ID)
             ->where(CustomDescriptionInterface::CUSTOMER_EMAIL . ' = ?', $customerEmail);
         $ids = $connection->fetchCol($select);
+
         return $ids ?: [];
     }
 }
