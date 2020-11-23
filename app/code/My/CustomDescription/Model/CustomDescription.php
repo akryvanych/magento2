@@ -1,14 +1,15 @@
 <?php
+
 namespace My\CustomDescription\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
-use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface;
+use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 
 class CustomDescription extends AbstractExtensibleModel implements CustomDescriptionInterface
 {
 
-    /** @var  array  */
+    /** @var  array */
     public $extensionAttributes;
 
     /**

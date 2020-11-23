@@ -1,12 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace My\CustomDescription\Plugin;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory;
 
+/**
+ * Class GridJoinCollection
+ * @package My\CustomDescription\Plugin
+ *
+ * Join custom row 'is_allowed_description' to customer table grid
+ */
 class GridJoinCollection
 {
-
+    /**
+     * @param CollectionFactory $subject
+     * @param $collection
+     * @param $requestName
+     * @return mixed
+     */
     public function afterGetReport(
         CollectionFactory $subject,
         $collection,

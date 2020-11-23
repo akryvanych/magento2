@@ -1,11 +1,13 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="allow_add_description" resource="default" engine="innodb" comment="Extension Description Table">
         <column xsi:type="int" name="description_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Description Primary field"/>
-        <column xsi:type="text" name="description" comment="Description"/>
         <column xsi:type="varchar" name="customer_email" nullable="false" comment="Customer email"/>
         <column xsi:type="boolean" name="is_allowed_description" comment="Is Allowed Description"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="description_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="ALLOW_ADD_DESCRIPTION_CUSTOMER_EMAIL">
+            <column name="customer_email"/>
         </constraint>
         <constraint xsi:type="foreign" referenceId="ALLOW_ADD_DESCRIPTION_CUSTOMER_EMAIL_CUSTOMER_ENTITY_EMAIL" table="allow_add_description" column="customer_email" referenceTable="customer_entity" referenceColumn="email" onDelete="CASCADE"/>
     </table>

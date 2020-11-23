@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace My\CustomDescription\Model\CustomDescriptions;
 
 use Magento\Framework\EntityManager\EntityManager;
@@ -8,7 +10,7 @@ use My\CustomDescription\Model\CustomDescriptionFactory;
 use My\CustomDescription\Model\ResourceModel\CustomDescriptions\Loader;
 
 /**
- * Class Provider
+ * Custom Description Provider
  * @package My\CustomDescription\Model\CustomDescriptions
  */
 class Provider implements CustomDescriptionsProviderInterface

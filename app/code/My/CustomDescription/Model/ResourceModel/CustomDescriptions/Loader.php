@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace My\CustomDescription\Model\ResourceModel\CustomDescriptions;
 
+use Exception;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
@@ -38,7 +41,7 @@ class Loader
     /**
      * @param $customerEmail
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getCustomersByCustomerEmails(string $customerEmail): array
     {
@@ -49,7 +52,6 @@ class Loader
             ->select()
             ->from($metadata->getEntityTable(), CustomDescriptionInterface::DESCRIPTION_ID)
             ->where(CustomDescriptionInterface::CUSTOMER_EMAIL . ' = ?', $customerEmail);
-//            ->where(CustomDescriptionInterface::IS_ALLOWED_DESCRIPTION . ' = ?', '1');
         $ids = $connection->fetchCol($select);
         return $ids ?: [];
     }

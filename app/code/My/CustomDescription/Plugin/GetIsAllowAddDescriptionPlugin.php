@@ -13,7 +13,7 @@ use My\CustomDescription\Api\CustomDescriptionsProviderInterface;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 /**
- * Get is allow add description class.
+ * Get is allow add description plugin class.
  */
 class GetIsAllowAddDescriptionPlugin
 {
@@ -50,7 +50,7 @@ class GetIsAllowAddDescriptionPlugin
     }
 
     /**
-     * Adds extra abilities data in array.
+     * Add custom data to customer data.
      *
      * @param DataProviderWithDefaultAddresses $subject
      * @param array $data
@@ -63,8 +63,9 @@ class GetIsAllowAddDescriptionPlugin
         $customerExtraAttributesObject = $this->customDescriptionsProvider->getDescriptions($customerEmail);
         if (!empty($customerExtraAttributesObject)) {
             $customerExtraAttributes = $this->dataObjectConverter->toFlatArray($customerExtraAttributesObject[0], []);
-            $setIsAllowed = (int)$customerExtraAttributes['is_allowed_description'];
-            $data[$customerId]['customer']['is_allowed_description'] = (string)$setIsAllowed;
+            $setIsAllowed = $customerExtraAttributes['is_allowed_description'];
+            $setIsAllowedToData = (string)(int)$setIsAllowed;
+            $data[$customerId]['customer']['is_allowed_description'] = $setIsAllowedToData;
         }
         return $data;
     }

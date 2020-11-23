@@ -3,6 +3,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace My\CustomDescription\Model\Plugin\Customer;
 
 use Magento\Customer\Api\Data\CustomerExtensionFactory;
@@ -12,6 +14,8 @@ use My\CustomDescription\Api\CustomDescriptionsProviderInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 
 /**
+ * Custom Description Repository plugin class.
+ *
  * Class Repository
  * @package My\CustomDescription\Model\Plugin\Customer
  */
@@ -46,11 +50,12 @@ class Repository
     }
 
     /**
-     * Add extension Attributes to customer
+     * Add switch of custom descriptions to customer extension attributes
      *
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $subject
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchResults $searchResult
      * @return \Magento\Framework\Api\SearchResults
+     * @throws \Exception
      */
     public function afterGetList(
         \Magento\Customer\Api\CustomerRepositoryInterface $subject,
@@ -65,6 +70,8 @@ class Repository
     }
 
     /**
+     * Before save plugin.
+     *
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $subject
      * @param CustomerInterface $customer
      * @return void
@@ -77,9 +84,12 @@ class Repository
     }
 
     /**
+     * After get plugin.
+     *
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $subject
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Exception
      */
     public function afterGet(
         \Magento\Customer\Api\CustomerRepositoryInterface $subject,
@@ -90,30 +100,12 @@ class Repository
     }
 
     /**
-     * Compare old and new attributes
+     * After save plugin.
      *
-     * @param array $newAttrs
-     * @param array $oldAttrs
-     * @throws \Exception
-     */
-    private function cleanOldAttrs(array $newAttrs, array $oldAttrs)
-    {
-        /** @var CustomDescriptionInterface $attr */
-        foreach ($newAttrs as $attr) {
-            /** @var CustomDescriptionInterface $oldAtrr */
-            foreach ($oldAttrs as $oldAttr) {
-                if ($oldAttr->getDescription() === $attr->getDescription()) {
-                    $this->entityManager->delete($oldAttr);
-                }
-            }
-        }
-    }
-
-    /**
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $subject
      * @param CustomerInterface $customer
      * @return CustomerInterface
-     *@throws \Exception
+     * @throws \Exception
      */
     public function afterSave(
         \Magento\Customer\Api\CustomerRepositoryInterface $subject,
@@ -124,16 +116,13 @@ class Repository
             $extensionAttributes = $this->currentCustomer->getExtensionAttributes();
 
             if ($extensionAttributes && $extensionAttributes->getCustomDescriptions()) {
-                /** @var CustomDescriptionInterface $customDescription */
+                /** @var CustomDescriptionInterface $customDescriptions */
                 $customDescriptions = $extensionAttributes->getCustomDescriptions();
-                $oldAttrs = $customer->getExtensionAttributes()->getCustomDescriptions();
-
                 if (is_array($customDescriptions)) {
-                    $this->cleanOldAttrs($customDescriptions, $oldAttrs);
-                    /** @var CustomDescriptionInterface $attr */
-                    foreach ($customDescriptions as $attr) {
-                        $attr->setCustomerEmail($customer->getEmail());
-                        $this->entityManager->save($attr);
+                    /** @var CustomDescriptionInterface $customDescription */
+                    foreach ($customDescriptions as $customDescription) {
+                        $customDescription->setCustomerEmail($customer->getEmail());
+                        $this->entityManager->save($customDescription);
                     }
                 }
             }
@@ -145,8 +134,11 @@ class Repository
     }
 
     /**
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * Add is allowed custom descriptions to the current customer.
+     *
+     * @param CustomerInterface $customer
      * @return self
+     * @throws \Exception
      */
     private function addDescriptionsToCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
