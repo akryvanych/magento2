@@ -33,22 +33,6 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function getDescription()
-    {
-        return $this->getData(self::DESCRIPTION);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setDescription(string $description): CustomDescriptionInterface
-    {
-        return $this->setData(self::DESCRIPTION, $description);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getCustomerEmail()
     {
         return $this->getData(self::CUSTOMER_EMAIL);

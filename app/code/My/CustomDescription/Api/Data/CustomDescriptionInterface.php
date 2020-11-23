@@ -10,12 +10,9 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
 {
     public const DESCRIPTION_ID = 'description_id';
 
-    public const DESCRIPTION = 'description';
-
     public const CUSTOMER_EMAIL = 'customer_email';
 
     public const IS_ALLOWED_DESCRIPTION = 'is_allowed_description';
-
 
     /**
      *
