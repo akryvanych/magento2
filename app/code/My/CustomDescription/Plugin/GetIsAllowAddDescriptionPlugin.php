@@ -60,7 +60,7 @@ class GetIsAllowAddDescriptionPlugin
     {
         $customerId = (int)$this->request->getParam('id');
         $customerEmail = $data[$customerId]['customer']['email'];
-        $customerExtraAttributesObject = $this->customDescriptionsProvider->getDescriptions($customerEmail);
+        $customerExtraAttributesObject = $this->customDescriptionsProvider->getIsAllowed($customerEmail);
         if (!empty($customerExtraAttributesObject)) {
             $customerExtraAttributes = $this->dataObjectConverter->toFlatArray($customerExtraAttributesObject[0], []);
             $setIsAllowed = $customerExtraAttributes['is_allowed_description'];

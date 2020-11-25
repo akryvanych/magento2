@@ -100,40 +100,6 @@ class Repository
     }
 
     /**
-     * After save plugin.
-     *
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $subject
-     * @param CustomerInterface $customer
-     * @return CustomerInterface
-     * @throws \Exception
-     */
-    public function afterSave(
-        \Magento\Customer\Api\CustomerRepositoryInterface $subject,
-        \Magento\Customer\Api\Data\CustomerInterface $customer
-    ) {
-        if ($this->currentCustomer !== null) {
-            /** @var CustomerInterface $previosCustomer */
-            $extensionAttributes = $this->currentCustomer->getExtensionAttributes();
-
-            if ($extensionAttributes && $extensionAttributes->getCustomDescriptions()) {
-                /** @var CustomDescriptionInterface $customDescriptions */
-                $customDescriptions = $extensionAttributes->getCustomDescriptions();
-                if (is_array($customDescriptions)) {
-                    /** @var CustomDescriptionInterface $customDescription */
-                    foreach ($customDescriptions as $customDescription) {
-                        $customDescription->setCustomerEmail($customer->getEmail());
-                        $this->entityManager->save($customDescription);
-                    }
-                }
-            }
-
-            $this->currentCustomer = null;
-        }
-
-        return $customer;
-    }
-
-    /**
      * Add is allowed custom descriptions to the current customer.
      *
      * @param CustomerInterface $customer
@@ -143,12 +109,11 @@ class Repository
     private function addDescriptionsToCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         $extensionAttributes = $customer->getExtensionAttributes();
-
         if (empty($extensionAttributes)) {
             $extensionAttributes = $this->customerExtensionFactory->create();
         }
-        $customDescriptions = $this->customDescriptionsProvider->getDescriptions($customer->getEmail());
-        $extensionAttributes->setCustomDescriptions($customDescriptions);
+        $isAllowedDescription = $this->customDescriptionsProvider->getIsAllowed($customer->getEmail())[0];
+        $extensionAttributes->setAllowAddDescription($isAllowedDescription);
         $customer->setExtensionAttributes($extensionAttributes);
         return $this;
     }

@@ -37,17 +37,19 @@ class Loader
      * @return array
      * @throws Exception
      */
-    public function getCustomersByCustomerEmails(string $customerEmail): array
+    public function getCustomersByCustomerEmails(string $customerEmail): string
     {
         $metadata = $this->metadataPool->getMetadata(CustomDescriptionInterface::class);
         $connection = $this->resourceConnection->getConnection();
-
         $select = $connection
             ->select()
-            ->from($metadata->getEntityTable(), CustomDescriptionInterface::DESCRIPTION_ID)
+            ->from($metadata->getEntityTable(), CustomDescriptionInterface::CUSTOMER_EMAIL)
             ->where(CustomDescriptionInterface::CUSTOMER_EMAIL . ' = ?', $customerEmail);
-        $ids = $connection->fetchCol($select);
-
-        return $ids ?: [];
+        $email = $connection->fetchCol($select);
+        if (!empty($email)) {
+            return $email[0];
+        } else {
+            return $email = 'new_user';
+        }
     }
 }

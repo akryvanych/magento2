@@ -15,5 +15,5 @@ interface CustomDescriptionsProviderInterface
      * @param string $customerEmail
      * @return array
      */
-    public function getDescriptions(string $customerEmail): array;
+    public function getIsAllowed(string $customerEmail): array;
 }

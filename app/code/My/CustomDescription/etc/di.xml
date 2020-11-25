@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="My\CustomDescription\Api\Data\CustomDescriptionInterface"
@@ -7,11 +6,11 @@
     <preference for="My\CustomDescription\Api\CustomDescriptionsProviderInterface"
                 type="My\CustomDescription\Model\CustomDescriptions\Provider"/>
     <type name="Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses">
-        <plugin name="joinAfterGetData"
+        <plugin name="getIsAllowAddDescription"
                 type="My\CustomDescription\Plugin\GetIsAllowAddDescriptionPlugin"/>
     </type>
     <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
-        <plugin name="joinAfterSave"
+        <plugin name="SetIsAllowAddDescription"
                 type="My\CustomDescription\Plugin\SetIsAllowAddDescriptionPlugin"/>
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
@@ -19,14 +18,14 @@
                 type="My\CustomDescription\Model\Plugin\Customer\Repository"/>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <plugin name="grid_custom_column" type="My\CustomDescription\Plugin\GridJoinCollection" sortOrder="5" />
+        <plugin name="GridJoinCollection" type="My\CustomDescription\Plugin\GridJoinCollection" sortOrder="5" />
     </type>
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="My\CustomDescription\Api\Data\CustomDescriptionInterface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">allow_add_description</item>
-                    <item name="identifierField" xsi:type="string">description_id</item>
+                    <item name="identifierField" xsi:type="string">customer_email</item>
                 </item>
             </argument>
         </arguments>

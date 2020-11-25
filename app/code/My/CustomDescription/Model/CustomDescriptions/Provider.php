@@ -46,14 +46,16 @@ class Provider implements CustomDescriptionsProviderInterface
      * @inheritdoc
      * @throws \Exception
      */
-    public function getDescriptions(string $customerEmail): array
+    public function getIsAllowed(string $customerEmail): array
     {
         $customDescriptions = [];
-        $ids = $this->loader->getCustomersByCustomerEmails($customerEmail);
-
-        foreach ($ids as $id) {
-            $customDescription = $this->customDescriptionFactory->create();
-            $customDescriptions[] = $this->entityManager->load($customDescription, $id);
+        $email = $this->loader->getCustomersByCustomerEmails($customerEmail);
+        $customDescription = $this->customDescriptionFactory->create();
+        if ($email !== 'new_user') {
+            $customDescriptions[] = $this->entityManager->load($customDescription, $email);
+        } else {
+            $customDescriptions[] = $this->entityManager->load($customDescription, $customerEmail);
+            $customDescriptions[0]->setCustomerEmail($customerEmail);
         }
         return $customDescriptions;
     }

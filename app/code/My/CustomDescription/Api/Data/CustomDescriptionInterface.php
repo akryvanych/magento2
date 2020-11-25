@@ -5,28 +5,13 @@ declare(strict_types=1);
 namespace My\CustomDescription\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
+use My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface;
 
 interface CustomDescriptionInterface extends ExtensibleDataInterface
 {
-    public const DESCRIPTION_ID = 'description_id';
-
     public const CUSTOMER_EMAIL = 'customer_email';
 
     public const IS_ALLOWED_DESCRIPTION = 'is_allowed_description';
-
-    /**
-     *
-     * @param int $descriptionId
-     * @return self
-     */
-    public function setDescriptionId(int $descriptionId);
-
-    /**
-     * Get Description Id
-     *
-     * @return int
-     */
-    public function getDescriptionId();
 
     /**
      * Set Customer Email
@@ -59,13 +44,13 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
     public function getIsAllowedDescription();
 
     /**
-     * @return CustomDescriptionExtensionInterface|null
+     * @return \My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
-     * @param CustomDescriptionExtensionInterface $extensionAttributes
+     * @param \My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface $extensionAttributes
      * @return self
      */
-    public function setExtensionAttributes(CustomDescriptionExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(\My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface $extensionAttributes);
 }

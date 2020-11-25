@@ -24,7 +24,7 @@ class SetIsAllowAddDescriptionPlugin
     /**
      * @var string
      */
-    const DESCRIPTION_TABLE = 'allow_add_description';
+    public const DESCRIPTION_TABLE = 'allow_add_description';
 
     /**
      * @var ResourceConnection
@@ -54,16 +54,20 @@ class SetIsAllowAddDescriptionPlugin
      */
     public function afterSave(CustomerRepository $subject, $data)
     {
-        $customerDescriptionEmail = $data->getExtensionAttributes()->getCustomDescriptions()[0]->getCustomerEmail();
-        $currentCustomerEmail = $this->request->getParams()['customer']['email'];
-        $customerDescriptionIsAllowed = $this->request->getParams()['customer']['is_allowed_description'];
-        if (strtolower($customerDescriptionEmail) === strtolower($currentCustomerEmail)) {
+        $customerExtensionData = $data->getExtensionAttributes()->getAllowAddDescription();
+        $customerEmail = $customerExtensionData->getCustomerEmail();
+        $customerIsAllowedDescription = $customerExtensionData->getIsAllowedDescription();
+        if (isset($this->request->getParams()['customer']['is_allowed_description'])) {
+            $currentIsAllowedDescription = $this->request->getParams()['customer']['is_allowed_description'];
+            $customerIsAllowedDescription = $currentIsAllowedDescription;
+        }
+        if (isset($customerEmail)) {
             $connection = $this->resourceConnection->getConnection();
             $tableName = $connection->getTableName(self::DESCRIPTION_TABLE);
-            $updateData = ["is_allowed_description" => $customerDescriptionIsAllowed];
-            $where = ['customer_email = ?' => $customerDescriptionEmail];
-            $connection->update($tableName, $updateData, $where);
+            $insertData = ["is_allowed_description" => $customerIsAllowedDescription , 'customer_email' => $customerEmail];
+            $connection->insertOnDuplicate($tableName, $insertData);
         }
+
         return $data;
     }
 }
