@@ -55,16 +55,14 @@ class SetIsAllowAddDescriptionPlugin
     public function afterSave(CustomerRepository $subject, $data)
     {
         $customerExtensionData = $data->getExtensionAttributes()->getAllowAddDescription();
-        $customerEmail = $customerExtensionData->getCustomerEmail();
-        $customerIsAllowedDescription = $customerExtensionData->getIsAllowedDescription();
-        if (isset($this->request->getParams()['customer']['is_allowed_description'])) {
-            $currentIsAllowedDescription = $this->request->getParams()['customer']['is_allowed_description'];
-            $customerIsAllowedDescription = $currentIsAllowedDescription;
-        }
-        if (isset($customerEmail)) {
+        if (!empty($customerExtensionData)) {
+            $customerEmail = $customerExtensionData->getCustomerEmail();
+            $customerIsAllowedDescription = $customerExtensionData->getIsAllowedDescription();
+            $currentIsAllowedDescription = $this->request->getParams()['customer']['is_allowed_description'] ?? $customerIsAllowedDescription;
+
             $connection = $this->resourceConnection->getConnection();
             $tableName = $connection->getTableName(self::DESCRIPTION_TABLE);
-            $insertData = ["is_allowed_description" => $customerIsAllowedDescription , 'customer_email' => $customerEmail];
+            $insertData = ["is_allowed_description" => $currentIsAllowedDescription , 'customer_email' => $customerEmail];
             $connection->insertOnDuplicate($tableName, $insertData);
         }
 

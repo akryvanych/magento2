@@ -5,19 +5,22 @@ declare(strict_types=1);
 namespace My\CustomDescription\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
-use My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 
 class CustomDescription extends AbstractExtensibleModel implements CustomDescriptionInterface
 {
-
-    /** @var  array */
+    /**
+     * @var  array
+     */
     public $extensionAttributes;
 
     /**
-     * @var array
+     * @inheritDoc
      */
-    private $_getExtensionAttributes;
+    protected function _construct()
+    {
+        $this->_init(ResourceModel\CustomDescription::class);
+    }
 
     /**
      * @inheritdoc
@@ -56,7 +59,7 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
      */
     public function getExtensionAttributes()
     {
-        return $this->_getExtensionAttributes;
+        return $this->_getExtensionAttributes();
     }
 
     /**

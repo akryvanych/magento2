@@ -8,45 +8,37 @@ declare(strict_types=1);
 namespace My\CustomDescription\Plugin;
 
 use Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses;
-use Magento\Framework\App\Request\Http;
-use My\CustomDescription\Api\CustomDescriptionsProviderInterface;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use My\CustomDescription\Model\CustomDescriptionRepository;
 
 /**
  * Get is allow add description plugin class.
  */
 class GetIsAllowAddDescriptionPlugin
 {
-    /**
-     * @var Http
-     */
-    private $request;
 
     /**
-     * @var CustomDescriptionsProviderInterface
+     * @var SearchCriteriaInterface
      */
-    private $customDescriptionsProvider;
+    private $searchCriteriaInterface;
 
     /**
-     * @var ExtensibleDataObjectConverter
+     * @var CustomDescriptionRepository
      */
-    private $dataObjectConverter;
+    private $customDescriptionRepository;
 
     /**
      * Plugin constructor.
      *
-     * @param Http $request
-     * @param CustomDescriptionsProviderInterface $customDescriptionsProvider
-     * @param ExtensibleDataObjectConverter $dataObjectConverter
+     * @param SearchCriteriaInterface $searchCriteriaInterface
+     * @param CustomDescriptionRepository $customDescriptionRepository
      */
     public function __construct(
-        Http $request,
-        CustomDescriptionsProviderInterface $customDescriptionsProvider,
-        ExtensibleDataObjectConverter $dataObjectConverter
+        SearchCriteriaInterface $searchCriteriaInterface,
+        CustomDescriptionRepository $customDescriptionRepository
     ) {
-        $this->request = $request;
-        $this->customDescriptionsProvider = $customDescriptionsProvider;
-        $this->dataObjectConverter = $dataObjectConverter;
+        $this->searchCriteriaInterface = $searchCriteriaInterface;
+        $this->customDescriptionRepository = $customDescriptionRepository;
     }
 
     /**
@@ -58,15 +50,20 @@ class GetIsAllowAddDescriptionPlugin
      */
     public function afterGetData(DataProviderWithDefaultAddresses $subject, array $data)
     {
-        $customerId = (int)$this->request->getParam('id');
-        $customerEmail = $data[$customerId]['customer']['email'];
-        $customerExtraAttributesObject = $this->customDescriptionsProvider->getIsAllowed($customerEmail);
-        if (!empty($customerExtraAttributesObject)) {
-            $customerExtraAttributes = $this->dataObjectConverter->toFlatArray($customerExtraAttributesObject[0], []);
-            $setIsAllowed = $customerExtraAttributes['is_allowed_description'];
-            $setIsAllowedToData = (string)(int)$setIsAllowed;
-            $data[$customerId]['customer']['is_allowed_description'] = $setIsAllowedToData;
+        $searchCriteriaInterface = $this->searchCriteriaInterface;
+        $descriptions = $this->customDescriptionRepository->getList($searchCriteriaInterface)->getItems();
+        array_walk($descriptions, function ($description) use (&$result) {
+            $result[$description->getCustomerEmail()] = $description->getIsAllowedDescription();
+        });
+
+        foreach ($data as &$customerData) {
+            $email = $customerData['customer']['email'] ?? '';
+            if ($email && isset($result[$email])) {
+                $customerData['customer']['is_allowed_description'] = (string)(int)$result[$email];
+            }
         }
+
         return $data;
+
     }
 }

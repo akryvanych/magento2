@@ -3,8 +3,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="My\CustomDescription\Api\Data\CustomDescriptionInterface"
                 type="My\CustomDescription\Model\CustomDescription"/>
-    <preference for="My\CustomDescription\Api\CustomDescriptionsProviderInterface"
-                type="My\CustomDescription\Model\CustomDescriptions\Provider"/>
+    <preference for="My\CustomDescription\Api\CustomDescriptionRepositoryInterface"
+                type="My\CustomDescription\Model\CustomDescriptionRepository"/>
+    <preference for="My\CustomDescription\Api\Data\CustomDescriptionInterface"
+                type="My\CustomDescription\Model\CustomDescription"/>
+    <preference for="My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface"
+                type="My\CustomDescription\Model\CustomDescriptionSearchResult"/>
     <type name="Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses">
         <plugin name="getIsAllowAddDescription"
                 type="My\CustomDescription\Plugin\GetIsAllowAddDescriptionPlugin"/>

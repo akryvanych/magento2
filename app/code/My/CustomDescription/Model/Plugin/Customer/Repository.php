@@ -9,9 +9,10 @@ namespace My\CustomDescription\Model\Plugin\Customer;
 
 use Magento\Customer\Api\Data\CustomerExtensionFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\EntityManager\EntityManager;
-use My\CustomDescription\Api\CustomDescriptionsProviderInterface;
-use My\CustomDescription\Api\Data\CustomDescriptionInterface;
+use My\CustomDescription\Model\CustomDescriptionRepository;
+use My\CustomDescription\Model\CustomDescriptionFactory;
 
 /**
  * Custom Description Repository plugin class.
@@ -27,26 +28,38 @@ class Repository
     /** @var CustomerInterface  */
     private $currentCustomer;
 
+    /** @var SearchCriteriaInterface */
+    private $searchCriteriaInterface;
+
+    /** @var CustomDescriptionRepository */
+    private $customDescriptionRepository;
+
     /** @var  EntityManager */
     private $entityManager;
 
-    /** @var CustomDescriptionsProviderInterface */
-    private $customDescriptionsProvider;
+    /** @var CustomDescriptionFactory */
+    private $customDescriptionFactory;
 
     /**
      * Repository constructor.
+     * @param SearchCriteriaInterface $searchCriteriaInterface
+     * @param CustomDescriptionRepository $customDescriptionRepository
      * @param CustomerExtensionFactory $customerExtensionFactory
      * @param EntityManager $entityManager
-     * @param CustomDescriptionsProviderInterface $customDescriptionsProvider
+     * @param CustomDescriptionFactory $customDescriptionFactory
      */
     public function __construct(
+        SearchCriteriaInterface $searchCriteriaInterface,
+        CustomDescriptionRepository $customDescriptionRepository,
         CustomerExtensionFactory $customerExtensionFactory,
         EntityManager $entityManager,
-        CustomDescriptionsProviderInterface $customDescriptionsProvider
+        CustomDescriptionFactory $customDescriptionFactory
     ) {
+        $this->searchCriteriaInterface = $searchCriteriaInterface;
+        $this->customDescriptionRepository = $customDescriptionRepository;
         $this->customerExtensionFactory = $customerExtensionFactory;
         $this->entityManager = $entityManager;
-        $this->customDescriptionsProvider = $customDescriptionsProvider;
+        $this->customDescriptionFactory = $customDescriptionFactory;
     }
 
     /**
@@ -109,12 +122,21 @@ class Repository
     private function addDescriptionsToCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         $extensionAttributes = $customer->getExtensionAttributes();
-        if (empty($extensionAttributes)) {
-            $extensionAttributes = $this->customerExtensionFactory->create();
+        $customerEmail = $customer->getEmail();
+        $searchCriteriaInterface = $this->searchCriteriaInterface;
+        $descriptions = $this->customDescriptionRepository->getList($searchCriteriaInterface)->getItems();
+        $isAllowedDescription = $descriptions[$customerEmail] ?? '';
+        if (!empty($descriptions[$customerEmail])) {
+            $extensionAttributes->setAllowAddDescription($isAllowedDescription);
+            $customer->setExtensionAttributes($extensionAttributes);
+            return $this;
+        } else {
+            $customDescription = $this->customDescriptionFactory->create();
+            $customDescriptions = $this->entityManager->load($customDescription, $customerEmail);
+            $customDescriptions->setCustomerEmail($customerEmail);
+            $extensionAttributes->setAllowAddDescription($customDescriptions);
+            $customer->setExtensionAttributes($extensionAttributes);
+            return $this;
         }
-        $isAllowedDescription = $this->customDescriptionsProvider->getIsAllowed($customer->getEmail())[0];
-        $extensionAttributes->setAllowAddDescription($isAllowedDescription);
-        $customer->setExtensionAttributes($extensionAttributes);
-        return $this;
     }
 }

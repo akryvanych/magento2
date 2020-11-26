@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace My\CustomDescription\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
-use My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface;
 
 interface CustomDescriptionInterface extends ExtensibleDataInterface
 {
@@ -23,7 +22,6 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
 
     /**
      * Get Customer Email
-     *
      * @return string
      */
     public function getCustomerEmail();
