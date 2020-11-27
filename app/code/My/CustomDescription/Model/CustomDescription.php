@@ -7,6 +7,9 @@ namespace My\CustomDescription\Model;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 
+/**
+ * CustomDescription Model
+ */
 class CustomDescription extends AbstractExtensibleModel implements CustomDescriptionInterface
 {
     /**

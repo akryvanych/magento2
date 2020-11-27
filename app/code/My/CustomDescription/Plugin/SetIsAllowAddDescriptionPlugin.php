@@ -54,7 +54,7 @@ class SetIsAllowAddDescriptionPlugin
      */
     public function afterSave(CustomerRepository $subject, $data)
     {
-        $customerExtensionData = $data->getExtensionAttributes()->getAllowAddDescription();
+        $customerExtensionData = $data->getExtensionAttributes()->getAllowAddDescription() ?? $data->setExtensionAttributes();
         if (!empty($customerExtensionData)) {
             $customerEmail = $customerExtensionData->getCustomerEmail();
             $customerIsAllowedDescription = $customerExtensionData->getIsAllowedDescription();

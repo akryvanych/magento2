@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace My\CustomDescription\Model\Plugin\Customer;
 
-use Magento\Customer\Api\Data\CustomerExtensionFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\EntityManager\EntityManager;
@@ -16,17 +15,10 @@ use My\CustomDescription\Model\CustomDescriptionFactory;
 
 /**
  * Custom Description Repository plugin class.
- *
- * Class Repository
- * @package My\CustomDescription\Model\Plugin\Customer
  */
 class Repository
 {
-    /** @var CustomerExtensionFactory */
-    private $customerExtensionFactory;
 
-    /** @var CustomerInterface  */
-    private $currentCustomer;
 
     /** @var SearchCriteriaInterface */
     private $searchCriteriaInterface;
@@ -44,20 +36,17 @@ class Repository
      * Repository constructor.
      * @param SearchCriteriaInterface $searchCriteriaInterface
      * @param CustomDescriptionRepository $customDescriptionRepository
-     * @param CustomerExtensionFactory $customerExtensionFactory
      * @param EntityManager $entityManager
      * @param CustomDescriptionFactory $customDescriptionFactory
      */
     public function __construct(
         SearchCriteriaInterface $searchCriteriaInterface,
         CustomDescriptionRepository $customDescriptionRepository,
-        CustomerExtensionFactory $customerExtensionFactory,
         EntityManager $entityManager,
         CustomDescriptionFactory $customDescriptionFactory
     ) {
         $this->searchCriteriaInterface = $searchCriteriaInterface;
         $this->customDescriptionRepository = $customDescriptionRepository;
-        $this->customerExtensionFactory = $customerExtensionFactory;
         $this->entityManager = $entityManager;
         $this->customDescriptionFactory = $customDescriptionFactory;
     }

@@ -1,10 +1,13 @@
 <?php
-
+declare(strict_types=1);
 
 namespace My\CustomDescription\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
+/**
+ * CustomDescription Resource Model
+ */
 class CustomDescription extends AbstractDb
 
 {
