@@ -1,6 +1,5 @@
 <?php
-
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace My\CustomDescription\Model\ResourceModel\CustomDescriptions;
 

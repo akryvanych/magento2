@@ -1,11 +1,14 @@
 <?php
-
 declare(strict_types=1);
 
 namespace My\CustomDescription\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * Custom description interface.
+ * @api
+ */
 interface CustomDescriptionInterface extends ExtensibleDataInterface
 {
     public const CUSTOMER_EMAIL = 'customer_email';
@@ -22,6 +25,7 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
 
     /**
      * Get Customer Email
+     *
      * @return string
      */
     public function getCustomerEmail();
@@ -39,16 +43,5 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
      *
      * @return bool
      */
-    public function getIsAllowedDescription();
-
-    /**
-     * @return \My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * @param \My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface $extensionAttributes
-     * @return self
-     */
-    public function setExtensionAttributes(\My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface $extensionAttributes);
+    public function isAllowedDescription();
 }

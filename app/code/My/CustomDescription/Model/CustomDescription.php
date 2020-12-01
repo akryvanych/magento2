@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace My\CustomDescription\Model;
@@ -12,25 +11,13 @@ use My\CustomDescription\Api\Data\CustomDescriptionInterface;
  */
 class CustomDescription extends AbstractExtensibleModel implements CustomDescriptionInterface
 {
-    /**
-     * @var  array
-     */
-    public $extensionAttributes;
-
-    /**
-     * @inheritDoc
-     */
-    protected function _construct()
-    {
-        $this->_init(ResourceModel\CustomDescription::class);
-    }
 
     /**
      * @inheritdoc
      */
     public function getCustomerEmail()
     {
-        return (string)$this->getData(self::CUSTOMER_EMAIL);
+        return (string) $this->getData(self::CUSTOMER_EMAIL);
     }
 
     /**
@@ -44,9 +31,9 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function getIsAllowedDescription()
+    public function isAllowedDescription()
     {
-        return (bool)$this->getData(self::IS_ALLOWED_DESCRIPTION);
+        return (bool) $this->getData(self::IS_ALLOWED_DESCRIPTION);
     }
 
     /**
@@ -58,18 +45,10 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function getExtensionAttributes()
+    protected function _construct()
     {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExtensionAttributes(\My\CustomDescription\Api\Data\CustomDescriptionExtensionInterface $extensionAttributes)
-    {
-        $this->_setExtensionAttributes($extensionAttributes);
+        $this->_init(ResourceModel\CustomDescription::class);
     }
 }

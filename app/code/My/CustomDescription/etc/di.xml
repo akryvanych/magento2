@@ -5,24 +5,24 @@
                 type="My\CustomDescription\Model\CustomDescription"/>
     <preference for="My\CustomDescription\Api\CustomDescriptionRepositoryInterface"
                 type="My\CustomDescription\Model\CustomDescriptionRepository"/>
-    <preference for="My\CustomDescription\Api\Data\CustomDescriptionInterface"
-                type="My\CustomDescription\Model\CustomDescription"/>
     <preference for="My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface"
                 type="My\CustomDescription\Model\CustomDescriptionSearchResult"/>
     <type name="Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses">
         <plugin name="getIsAllowAddDescription"
-                type="My\CustomDescription\Plugin\GetIsAllowAddDescriptionPlugin"/>
+                type="My\CustomDescription\Plugin\GetIsAllowAddDescription"/>
     </type>
     <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
-        <plugin name="SetIsAllowAddDescription"
-                type="My\CustomDescription\Plugin\SetIsAllowAddDescriptionPlugin"/>
+        <plugin name="SaveIsAllowAddDescriptionInCustomerForm"
+                type="My\CustomDescription\Plugin\SaveIsAllowAddDescription"/>
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
-        <plugin name="joinCustomDescriptionToCustomer"
-                type="My\CustomDescription\Model\Plugin\Customer\Repository"/>
+        <plugin name="AddExtensionAttributesToCustomer"
+                type="My\CustomDescription\Model\Plugin\Customer\AddExtensionAttributesToCustomer"/>
+        <plugin name="BeforeSaveExtensionAttributesToCustomer"
+                type="My\CustomDescription\Model\Plugin\Customer\BeforeSaveExtensionAttributes"/>
     </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <plugin name="GridJoinCollection" type="My\CustomDescription\Plugin\GridJoinCollection" sortOrder="5" />
+    <type name="Magento\Customer\Model\ResourceModel\Grid\Collection">
+        <plugin name="BeforeLoadCustomerCollection" type="My\CustomDescription\Plugin\BeforeLoadCustomerCollection"/>
     </type>
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
