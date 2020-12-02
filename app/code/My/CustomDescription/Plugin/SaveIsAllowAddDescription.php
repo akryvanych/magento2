@@ -17,15 +17,13 @@ class SaveIsAllowAddDescription
     /** @var CustomDescriptionRepository */
     private $customDescriptionRepository;
 
-
     /**
      * Plugin constructor.
      *
      * @param CustomDescriptionRepository $customDescriptionRepository
      */
-    public function __construct(
-        CustomDescriptionRepository $customDescriptionRepository
-    ) {
+    public function __construct(CustomDescriptionRepository $customDescriptionRepository)
+    {
         $this->customDescriptionRepository = $customDescriptionRepository;
     }
 
@@ -33,7 +31,7 @@ class SaveIsAllowAddDescription
      * Saving extension value - 'is_allowed_description'
      *
      * @param CustomerRepository $subject
-     * @param object $data
+     * @param object             $data
      * @return mixed
      */
     public function afterSave(CustomerRepository $subject, $data)
@@ -42,9 +40,9 @@ class SaveIsAllowAddDescription
             $data->getExtensionAttributes()->getAllowAddDescription() ?? $data->setExtensionAttributes();
         if (is_bool($customerIsAllowedDescription)) {
             $customerEmail = $data->getEmail();
-            $currentIsAllowedDescription = (bool)(int)$_POST['customer']['is_allowed_description'] ??
+            $currentIsAllowedDescription = $_POST['customer']['is_allowed_description'] ??
                 $customerIsAllowedDescription;
-            $this->customDescriptionRepository->save($customerEmail, $currentIsAllowedDescription);
+            $this->customDescriptionRepository->save($customerEmail, (bool)$currentIsAllowedDescription);
         }
         return $data;
     }

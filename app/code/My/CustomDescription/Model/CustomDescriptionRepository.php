@@ -93,7 +93,6 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
-
         $searchResult = $this->customDescriptionSearchResultInterfaceFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
@@ -122,6 +121,6 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
                 $result[$description->getCustomerEmail()] = $description->isAllowedDescription();
             }
         );
-        return $result[$customerEmail];
+        return $result[$customerEmail] ?? '0';
     }
 }

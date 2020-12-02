@@ -53,12 +53,12 @@ class AddAllowDescriptionToCustomer
      * @return self
      * @throws \Exception
      */
-    public function addDescriptionsToCustomer(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    public function addDescriptionsToCustomer(CustomerInterface $customer)
     {
         $extensionAttributes     = $customer->getExtensionAttributes();
         $customerEmail           = $customer->getEmail();
         $isAllowed = $this->customDescriptionRepository->getIsAllowedByEmail($customerEmail);
-        if (!empty($isAllowed)) {
+        if ($isAllowed != 0) {
             $extensionAttributes->setAllowAddDescription($isAllowed);
         } else {
             $extensionAttributes->setAllowAddDescription(false);
