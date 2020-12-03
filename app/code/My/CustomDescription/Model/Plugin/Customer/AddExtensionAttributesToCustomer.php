@@ -38,7 +38,7 @@ class AddExtensionAttributesToCustomer
         CustomerRepositoryInterface $subject,
         CustomerInterface $customer
     ) {
-        $this->addAllowDescription->addDescriptionsToCustomer($customer);
+        $this->addAllowDescription->addDescriptionsToNewCustomer($customer);
         return $customer;
     }
 }

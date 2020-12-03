@@ -14,7 +14,7 @@ use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 interface CustomDescriptionRepositoryInterface
 {
     /**
-     * Get list of items in CustomDescriptionInterface
+     * Get list of is_allowed_descriptions in CustomDescriptionInterface
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return CustomDescriptionInterface
@@ -22,7 +22,7 @@ interface CustomDescriptionRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria);
 
     /**
-     * Get allow add description by email
+     * Get is_allowed_description by email
      *
      * @param string $customerEmail
      * @return CustomDescriptionInterface
@@ -31,7 +31,7 @@ interface CustomDescriptionRepositoryInterface
     public function getIsAllowedByEmail(string $customerEmail);
 
     /**
-     * Save Custom Description item
+     * Save Custom Description in "allow_add_description" table
      *
      * @param string $customerEmail
      * @param bool $currentIsAllowedDescription

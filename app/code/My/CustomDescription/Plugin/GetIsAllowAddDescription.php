@@ -8,6 +8,7 @@ use Magento\Customer\Model\Data\Customer;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use My\CustomDescription\Model\CustomDescriptionRepository;
+use My\CustomDescription\Plugin\AddAllowDescriptionToCustomer;
 
 /**
  * Get is allow add description plugin class.
@@ -24,8 +25,8 @@ class GetIsAllowAddDescription
     /** @var CustomDescriptionRepository */
     private $customDescriptionRepository;
 
-    /** @var Customer */
-    private $customer;
+    /** @var AddAllowDescriptionToCustomer */
+    private $addAllowDescriptionToCustomer;
 
     /**
      * Plugin constructor.
@@ -33,18 +34,18 @@ class GetIsAllowAddDescription
      * @param SearchCriteriaInterface       $searchCriteriaInterface
      * @param CustomDescriptionRepository   $customDescriptionRepository
      * @param SearchCriteriaBuilder         $searchCriteriaBuilder
-     * @param Customer                      $customer
+     * @param AddAllowDescriptionToCustomer $addAllowDescriptionToCustomer
      */
     public function __construct(
-        Customer $customer,
         SearchCriteriaInterface $searchCriteriaInterface,
         CustomDescriptionRepository $customDescriptionRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        AddAllowDescriptionToCustomer $addAllowDescriptionToCustomer
     ) {
-        $this->customer = $customer;
         $this->searchCriteriaInterface     = $searchCriteriaInterface;
         $this->searchCriteriaBuilder       = $searchCriteriaBuilder;
         $this->customDescriptionRepository = $customDescriptionRepository;
+        $this->addAllowDescriptionToCustomer = $addAllowDescriptionToCustomer;
     }
 
     /**
@@ -61,7 +62,7 @@ class GetIsAllowAddDescription
         foreach ($data as &$customerData) {
             $email = $customerData['customer']['email'] ?? '';
             if ($email && isset($isAllowed)) {
-                $customerData['customer']['is_allowed_description'] = (string)(int)$isAllowed;
+                $customerData['customer']['extension_attributes']['is_allowed_description'] = (string)(int)$isAllowed;
             }
         }
 

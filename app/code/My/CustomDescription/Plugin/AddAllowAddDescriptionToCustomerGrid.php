@@ -6,12 +6,12 @@ namespace My\CustomDescription\Plugin;
 use Magento\Customer\Model\ResourceModel\Grid\Collection;
 
 /**
- * Add allow_add_description to customer admin grid
+ * Add column to customer collection
  */
-class BeforeLoadCustomerCollection
+class AddAllowAddDescriptionToCustomerGrid
 {
     /**
-     * Add custom row to the customer grid
+     * Add allow_add_description to customer admin grid
      *
      * @param Collection $collection
      */

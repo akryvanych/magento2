@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace My\CustomDescription\Model;
 
@@ -69,7 +69,7 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      * Save attribute
      *
      * @param string $customerEmail
-     * @param bool $currentIsAllowedDescription
+     * @param bool   $currentIsAllowedDescription
      * @return CustomDescriptionInterface|void
      */
     public function save(
@@ -79,8 +79,32 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
         $connection = $this->resourceConnection->getConnection();
         $tableName  = $connection->getTableName(self::DESCRIPTION_TABLE);
         $insertData =
-        ["is_allowed_description" => $currentIsAllowedDescription, 'customer_email' => $customerEmail];
+            ["is_allowed_description" => $currentIsAllowedDescription, 'customer_email' => $customerEmail];
         $connection->insertOnDuplicate($tableName, $insertData);
+    }
+
+    /**
+     * Get attribute is_allowed_description by email
+     *
+     * @param string $customerEmail
+     * @return bool|string
+     */
+    public function getIsAllowedByEmail(string $customerEmail)
+    {
+        $searchCriteriaBuilder = $this->searchCriteriaBuilder->addFilter(
+            'customer_email',
+            "$customerEmail"
+        )->create();
+        $descriptions          = $this->getList($searchCriteriaBuilder)->getItems();
+        $result                = [];
+        array_walk(
+            $descriptions,
+            function ($description) use (&$result) {
+                $result[$description->getCustomerEmail()] = $description->isAllowedDescription();
+            }
+        );
+
+        return $result[$customerEmail] ?? '0';
     }
 
     /**
@@ -99,28 +123,5 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
         $searchResult->setTotalCount($collection->getSize());
 
         return $searchResult;
-    }
-
-    /**
-     * Get attribute is_allowed_description by email
-     *
-     * @param string $customerEmail
-     * @return bool|void
-     */
-    public function getIsAllowedByEmail(string $customerEmail)
-    {
-        $searchCriteriaBuilder = $this->searchCriteriaBuilder->addFilter(
-            'customer_email',
-            "$customerEmail"
-        )->create();
-        $descriptions = $this->getList($searchCriteriaBuilder)->getItems();
-        $result = [];
-        array_walk(
-            $descriptions,
-            function ($description) use (&$result) {
-                $result[$description->getCustomerEmail()] = $description->isAllowedDescription();
-            }
-        );
-        return $result[$customerEmail] ?? '0';
     }
 }

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace My\CustomDescription\Plugin;
 
@@ -32,18 +32,17 @@ class SaveIsAllowAddDescription
      *
      * @param CustomerRepository $subject
      * @param object             $data
-     * @return mixed
+     * @return object
      */
     public function afterSave(CustomerRepository $subject, $data)
     {
         $customerIsAllowedDescription =
-            $data->getExtensionAttributes()->getAllowAddDescription() ?? $data->setExtensionAttributes();
+            $data->getExtensionAttributes()->getIsAllowedDescription() ?? '';
         if (is_bool($customerIsAllowedDescription)) {
             $customerEmail = $data->getEmail();
-            $currentIsAllowedDescription = $_POST['customer']['is_allowed_description'] ??
-                $customerIsAllowedDescription;
-            $this->customDescriptionRepository->save($customerEmail, (bool)$currentIsAllowedDescription);
+            $this->customDescriptionRepository->save($customerEmail, $customerIsAllowedDescription);
         }
+
         return $data;
     }
 }

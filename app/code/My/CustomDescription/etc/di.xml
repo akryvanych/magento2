@@ -22,7 +22,7 @@
                 type="My\CustomDescription\Model\Plugin\Customer\BeforeSaveExtensionAttributes"/>
     </type>
     <type name="Magento\Customer\Model\ResourceModel\Grid\Collection">
-        <plugin name="BeforeLoadCustomerCollection" type="My\CustomDescription\Plugin\BeforeLoadCustomerCollection"/>
+        <plugin name="AddAllowAddDescriptionToCustomerGrid" type="My\CustomDescription\Plugin\AddAllowAddDescriptionToCustomerGrid"/>
     </type>
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
