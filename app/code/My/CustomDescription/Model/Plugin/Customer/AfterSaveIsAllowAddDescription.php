@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace My\CustomDescription\Plugin;
+namespace My\CustomDescription\Model\Plugin\Customer;
 
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use My\CustomDescription\Model\CustomDescriptionRepository;
@@ -9,7 +9,7 @@ use My\CustomDescription\Model\CustomDescriptionRepository;
 /**
  * Set is allow add description plugin class.
  */
-class SaveIsAllowAddDescription
+class AfterSaveIsAllowAddDescription
 {
     /** @var string */
     public const DESCRIPTION_TABLE = 'allow_add_description';
@@ -28,7 +28,7 @@ class SaveIsAllowAddDescription
     }
 
     /**
-     * Saving extension value - 'is_allowed_description'
+     * Saving extension value - 'is_allowed_description' to the new customer.
      *
      * @param CustomerRepository $subject
      * @param object             $data

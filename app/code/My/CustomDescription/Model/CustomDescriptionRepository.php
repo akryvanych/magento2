@@ -8,7 +8,6 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ResourceConnection;
 use My\CustomDescription\Api\CustomDescriptionRepositoryInterface;
-use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterfaceFactory;
 use My\CustomDescription\Model\ResourceModel\CustomDescriptions\CollectionFactory;
@@ -70,7 +69,7 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      *
      * @param string $customerEmail
      * @param bool   $currentIsAllowedDescription
-     * @return CustomDescriptionInterface|void
+     * @return void
      */
     public function save(
         string $customerEmail,

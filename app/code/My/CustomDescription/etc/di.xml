@@ -12,8 +12,8 @@
                 type="My\CustomDescription\Plugin\GetIsAllowAddDescription"/>
     </type>
     <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
-        <plugin name="SaveIsAllowAddDescriptionInCustomerForm"
-                type="My\CustomDescription\Plugin\SaveIsAllowAddDescription"/>
+        <plugin name="AfterSaveIsAllowAddDescriptionInCustomerForm"
+                type="My\CustomDescription\Model\Plugin\Customer\AfterSaveIsAllowAddDescription"/>
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="AddExtensionAttributesToCustomer"
