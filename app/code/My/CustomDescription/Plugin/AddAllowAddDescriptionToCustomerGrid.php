@@ -17,6 +17,6 @@ class AddAllowAddDescriptionToCustomerGrid
      */
     public function beforeLoad(Collection $collection)
     {
-        $collection->join('allow_add_description', 'email = customer_email', 'is_allowed_description');
+        $collection->getSelect()->joinLeft('allow_add_description', 'email = customer_email', 'is_allowed_description');
     }
 }

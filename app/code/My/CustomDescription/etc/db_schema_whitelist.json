@@ -1,0 +1,12 @@
+{
+    "allow_add_description": {
+        "column": {
+            "customer_email": true,
+            "is_allowed_description": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ALLOW_ADD_DESCRIPTION_CUSTOMER_EMAIL_CUSTOMER_ENTITY_EMAIL": true
+        }
+    }
+}

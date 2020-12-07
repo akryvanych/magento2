@@ -6,7 +6,7 @@ namespace My\CustomDescription\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Custom description interface.
+ * Custom description interface for customer.
  * @api
  */
 interface CustomDescriptionInterface extends ExtensibleDataInterface
@@ -21,14 +21,14 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
      * @param string $customerEmail
      * @return self
      */
-    public function setCustomerEmail(string $customerEmail);
+    public function setCustomerEmail(string $customerEmail): CustomDescriptionInterface;
 
     /**
      * Get Customer Email
      *
      * @return string
      */
-    public function getCustomerEmail();
+    public function getCustomerEmail() : string;
 
     /**
      * Set Is Allowed
@@ -36,12 +36,13 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
      * @param bool $isAllowedDescription
      * @return self
      */
-    public function setIsAllowedDescription(bool $isAllowedDescription);
+    public function setIsAllowedDescription(bool $isAllowedDescription): CustomDescriptionInterface;
 
     /**
      * Get Is Allowed
      *
+     * @SuppressWarnings("unchecked")
      * @return bool
      */
-    public function isAllowedDescription();
+    public function getIsAllowedDescription() : bool;
 }

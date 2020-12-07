@@ -3,124 +3,90 @@ declare(strict_types = 1);
 
 namespace My\CustomDescription\Model;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ResourceConnection;
 use My\CustomDescription\Api\CustomDescriptionRepositoryInterface;
-use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface;
-use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterfaceFactory;
-use My\CustomDescription\Model\ResourceModel\CustomDescriptions\CollectionFactory;
+use My\CustomDescription\Api\Data\CustomDescriptionInterface;
+use My\CustomDescription\Model\CustomDescription as CustomDescriptionModel;
+use My\CustomDescription\Model\ResourceModel\CustomDescription;
 
 /**
  * Custom Description repository.
  */
 class CustomDescriptionRepository implements CustomDescriptionRepositoryInterface
 {
-    /** @var string */
-    public const DESCRIPTION_TABLE = 'allow_add_description';
-
     /**
-     * @var CollectionProcessorInterface
+     * @var ResourceConnection
      */
-    private $collectionProcessor;
-
-    /**
-     * @var CustomDescriptionSearchResultInterfaceFactory
-     */
-    private $customDescriptionSearchResultInterfaceFactory;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /** @var ResourceConnection */
     private $resourceConnection;
 
     /**
-     * @param CollectionProcessorInterface                  $collectionProcessor
-     * @param CustomDescriptionSearchResultInterfaceFactory $customDescriptionSearchResultInterfaceFactory
-     * @param CollectionFactory                             $collectionFactory
+     * @var CustomDescription
+     */
+    private $customDescription;
+
+    /**
+     * @var CustomDescriptionModel
+     */
+    private $customDescriptionModel;
+
+    /**
+     * @var CustomDescriptionInterface
+     */
+    private $customDescriptionInterface;
+
+    /**
      * @param ResourceConnection                            $resourceConnection
-     * @param SearchCriteriaBuilder                         $searchCriteriaBuilder
+     * @param CustomDescription                             $customDescription
+     * @param CustomDescriptionModel                        $customDescriptionModel
+     * @param CustomDescriptionInterface                    $customDescriptionInterface
      */
     public function __construct(
-        CollectionProcessorInterface $collectionProcessor,
-        CustomDescriptionSearchResultInterfaceFactory $customDescriptionSearchResultInterfaceFactory,
-        CollectionFactory $collectionFactory,
         ResourceConnection $resourceConnection,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        CustomDescription $customDescription,
+        CustomDescriptionModel $customDescriptionModel,
+        CustomDescriptionInterface $customDescriptionInterface
     ) {
-        $this->collectionProcessor                           = $collectionProcessor;
-        $this->customDescriptionSearchResultInterfaceFactory = $customDescriptionSearchResultInterfaceFactory;
-        $this->collectionFactory                             = $collectionFactory;
         $this->resourceConnection                            = $resourceConnection;
-        $this->searchCriteriaBuilder                         = $searchCriteriaBuilder;
+        $this->customDescription                             = $customDescription;
+        $this->customDescriptionModel                        = $customDescriptionModel;
+        $this->customDescriptionInterface                    = $customDescriptionInterface;
     }
 
     /**
-     * Save attribute
+     * Save CustomDescriptionInterface
      *
-     * @param string $customerEmail
-     * @param bool   $currentIsAllowedDescription
+     * @param CustomDescriptionInterface $customDescription
      * @return void
      */
-    public function save(
-        string $customerEmail,
-        bool $currentIsAllowedDescription
-    ) {
+    public function save(CustomDescriptionInterface $customDescription)
+    {
+        $currentIsAllowedDescription = $customDescription->getIsAllowedDescription();
+        $customerEmail = $customDescription->getCustomerEmail();
         $connection = $this->resourceConnection->getConnection();
-        $tableName  = $connection->getTableName(self::DESCRIPTION_TABLE);
+        $tableName  = $connection->getTableName('allow_add_description');
         $insertData =
             ["is_allowed_description" => $currentIsAllowedDescription, 'customer_email' => $customerEmail];
         $connection->insertOnDuplicate($tableName, $insertData);
     }
 
     /**
-     * Get attribute is_allowed_description by email
+     * Get CustomDescriptionInterface by customer email
      *
      * @param string $customerEmail
-     * @return bool|string
+     * @return CustomDescriptionInterface
      */
-    public function getIsAllowedByEmail(string $customerEmail)
+    public function getByEmail(string $customerEmail): CustomDescriptionInterface
     {
-        $searchCriteriaBuilder = $this->searchCriteriaBuilder->addFilter(
-            'customer_email',
-            "$customerEmail"
-        )->create();
-        $descriptions          = $this->getList($searchCriteriaBuilder)->getItems();
-        $result                = [];
-        array_walk(
-            $descriptions,
-            function ($description) use (&$result) {
-                $result[$description->getCustomerEmail()] = $description->isAllowedDescription();
-            }
-        );
+        $object = $this->customDescriptionModel;
+        $this->customDescription->load($object, $customerEmail, 'customer_email');
+        if (empty($object->getData())) {
+            $object->setIsAllowedDescription(false);
+            $object->setCustomerEmail($customerEmail);
+        }
+        $customDescriptionInterface = $this->customDescriptionInterface;
+        $customDescriptionInterface->setCustomerEmail($object->getData()['customer_email']);
+        $customDescriptionInterface->setIsAllowedDescription((bool)$object->getData()['is_allowed_description']) ?? '';
 
-        return $result[$customerEmail] ?? '0';
-    }
-
-    /**
-     * Get list of allow descriptions
-     *
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return CustomDescriptionSearchResultInterface|void
-     */
-    public function getList(SearchCriteriaInterface $searchCriteria)
-    {
-        $collection = $this->collectionFactory->create();
-        $this->collectionProcessor->process($searchCriteria, $collection);
-        $searchResult = $this->customDescriptionSearchResultInterfaceFactory->create();
-        $searchResult->setSearchCriteria($searchCriteria);
-        $searchResult->setItems($collection->getItems());
-        $searchResult->setTotalCount($collection->getSize());
-
-        return $searchResult;
+        return $customDescriptionInterface;
     }
 }

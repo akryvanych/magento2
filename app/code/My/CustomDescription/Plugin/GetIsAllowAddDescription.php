@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace My\CustomDescription\Plugin;
 
@@ -7,7 +7,7 @@ use Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses;
 use My\CustomDescription\Model\CustomDescriptionRepository;
 
 /**
- * Get is allow add description plugin class.
+ * Get is allow add description for customer form.
  */
 class GetIsAllowAddDescription
 {
@@ -18,7 +18,7 @@ class GetIsAllowAddDescription
     /**
      * Plugin constructor.
      *
-     * @param CustomDescriptionRepository   $customDescriptionRepository
+     * @param CustomDescriptionRepository $customDescriptionRepository
      */
     public function __construct(
         CustomDescriptionRepository $customDescriptionRepository
@@ -29,18 +29,20 @@ class GetIsAllowAddDescription
     /**
      * Add custom data to customer data.
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param DataProviderWithDefaultAddresses $subject
      * @param array                            $data
      * @return array
      */
-    public function afterGetData(DataProviderWithDefaultAddresses $subject, array $data)
+    public function afterGetData(DataProviderWithDefaultAddresses $subject, array $data): array
     {
-        $customerEmail = current($data)['customer']['email'];
-        $isAllowed = $this->customDescriptionRepository->getIsAllowedByEmail($customerEmail);
         foreach ($data as &$customerData) {
-            $email = $customerData['customer']['email'] ?? '';
+            $customerEmail = $customerData['customer']['email'];
+            $isAllowed     = $this->customDescriptionRepository->getByEmail($customerEmail);
+            $email         = $customerEmail ?? null;
             if ($email && isset($isAllowed)) {
-                $customerData['customer']['extension_attributes']['is_allowed_description'] = (string)(int)$isAllowed;
+                $customerData['customer']['extension_attributes']['is_allowed_description'] =
+                    $isAllowed->getIsAllowedDescription();
             }
         }
 

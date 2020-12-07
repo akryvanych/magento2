@@ -15,7 +15,7 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function getCustomerEmail()
+    public function getCustomerEmail() : string
     {
         return (string) $this->getData(self::CUSTOMER_EMAIL);
     }
@@ -31,7 +31,7 @@ class CustomDescription extends AbstractExtensibleModel implements CustomDescrip
     /**
      * @inheritdoc
      */
-    public function isAllowedDescription()
+    public function getIsAllowedDescription() : bool
     {
         return (bool) $this->getData(self::IS_ALLOWED_DESCRIPTION);
     }

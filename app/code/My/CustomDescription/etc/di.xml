@@ -5,24 +5,17 @@
                 type="My\CustomDescription\Model\CustomDescription"/>
     <preference for="My\CustomDescription\Api\CustomDescriptionRepositoryInterface"
                 type="My\CustomDescription\Model\CustomDescriptionRepository"/>
-    <preference for="My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface"
-                type="My\CustomDescription\Model\CustomDescriptionSearchResult"/>
     <type name="Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses">
-        <plugin name="getIsAllowAddDescription"
+        <plugin name="addIsAllowDescriptionToDataProvider"
                 type="My\CustomDescription\Plugin\GetIsAllowAddDescription"/>
     </type>
-    <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
-        <plugin name="AfterSaveIsAllowAddDescriptionInCustomerForm"
-                type="My\CustomDescription\Model\Plugin\Customer\AfterSaveIsAllowAddDescription"/>
-    </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
-        <plugin name="AddExtensionAttributesToCustomer"
-                type="My\CustomDescription\Model\Plugin\Customer\AddExtensionAttributesToCustomer"/>
-        <plugin name="BeforeSaveExtensionAttributesToCustomer"
-                type="My\CustomDescription\Model\Plugin\Customer\BeforeSaveExtensionAttributes"/>
+        <plugin name="SaveIsAllowDescriptionAfterCustomerSave"
+                type="My\CustomDescription\Plugin\Customer\AfterSaveIsAllowAddDescription"/>
     </type>
     <type name="Magento\Customer\Model\ResourceModel\Grid\Collection">
-        <plugin name="AddAllowAddDescriptionToCustomerGrid" type="My\CustomDescription\Plugin\AddAllowAddDescriptionToCustomerGrid"/>
+        <plugin name="AddAllowAddDescriptionToCustomerGrid"
+                type="My\CustomDescription\Plugin\AddAllowAddDescriptionToCustomerGrid"/>
     </type>
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
