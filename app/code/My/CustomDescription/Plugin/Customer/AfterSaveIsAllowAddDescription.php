@@ -37,6 +37,7 @@ class AfterSaveIsAllowAddDescription
      * @param CustomerInterface           $customer
      * @return CustomerInterface
      * @throws NoSuchEntityException
+     * @throws AlreadyExistsException
      */
     public function afterSave(
         CustomerRepositoryInterface $subject,
@@ -46,8 +47,7 @@ class AfterSaveIsAllowAddDescription
         $customerEmail = $result->getEmail();
         $customDescriptionInterface = $this->customDescriptionRepository->getByEmail($customerEmail);
         $customerIsAllowedDescription =
-            $customer->getExtensionAttributes()->getIsAllowedDescription() ?? $customer->getExtensionAttributes()
-                ->setIsAllowedDescription(false)->getIsAllowedDescription();
+            $customer->getExtensionAttributes()->getIsAllowedDescription() ?? false;
         $customDescriptionInterface->setIsAllowedDescription((bool)$customerIsAllowedDescription);
         $this->customDescriptionRepository->save($customDescriptionInterface);
 

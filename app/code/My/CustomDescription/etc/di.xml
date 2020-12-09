@@ -5,6 +5,8 @@
                 type="My\CustomDescription\Model\CustomDescription"/>
     <preference for="My\CustomDescription\Api\CustomDescriptionRepositoryInterface"
                 type="My\CustomDescription\Model\CustomDescriptionRepository"/>
+    <preference for="My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface"
+                type="My\CustomDescription\Model\Data\CustomDescriptionSearchResult"/>
     <type name="Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses">
         <plugin name="addIsAllowDescriptionToDataProvider"
                 type="My\CustomDescription\Plugin\GetIsAllowAddDescription"/>

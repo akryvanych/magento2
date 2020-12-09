@@ -3,11 +3,17 @@ declare(strict_types = 1);
 
 namespace My\CustomDescription\Model;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use My\CustomDescription\Api\CustomDescriptionRepositoryInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
-use My\CustomDescription\Model\CustomDescription as CustomDescriptionModel;
+use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface;
+use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterfaceFactory;
 use My\CustomDescription\Model\ResourceModel\CustomDescription;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use My\CustomDescription\Model\ResourceModel\CustomDescriptions\CollectionFactory;
 
 /**
  * Custom Description repository.
@@ -15,19 +21,9 @@ use My\CustomDescription\Model\ResourceModel\CustomDescription;
 class CustomDescriptionRepository implements CustomDescriptionRepositoryInterface
 {
     /**
-     * @var ResourceConnection
+     * @var CustomDescriptionFactory
      */
-    private $resourceConnection;
-
-    /**
-     * @var CustomDescription
-     */
-    private $customDescription;
-
-    /**
-     * @var CustomDescriptionModel
-     */
-    private $customDescriptionModel;
+    private $customDescriptionFactory;
 
     /**
      * @var CustomDescriptionInterface
@@ -35,21 +31,47 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
     private $customDescriptionInterface;
 
     /**
-     * @param ResourceConnection                            $resourceConnection
-     * @param CustomDescription                             $customDescription
-     * @param CustomDescriptionModel                        $customDescriptionModel
+     * @var CustomDescription
+     */
+    private $customDescriptionResourceModel;
+
+    /**
+     * @var CustomDescriptionSearchResultInterfaceFactory
+     */
+    private $customDescriptionSearchResultInterfaceFactory;
+
+    /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @param CustomDescriptionInterface                    $customDescriptionInterface
+     * @param CustomDescriptionFactory                      $customDescriptionFactory
+     * @param CustomDescriptionSearchResultInterfaceFactory $customDescriptionSearchResultInterfaceFactory
+     * @param CollectionProcessorInterface                  $collectionProcessor
+     * @param CustomDescription                             $customDescriptionResourceModel
+     * @param CollectionFactory                             $collectionFactory
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
-        CustomDescription $customDescription,
-        CustomDescriptionModel $customDescriptionModel,
-        CustomDescriptionInterface $customDescriptionInterface
+        CustomDescriptionInterface $customDescriptionInterface,
+        CustomDescriptionFactory $customDescriptionFactory,
+        CustomDescriptionSearchResultInterfaceFactory $customDescriptionSearchResultInterfaceFactory,
+        CollectionProcessorInterface $collectionProcessor,
+        CustomDescription $customDescriptionResourceModel,
+        CollectionFactory $collectionFactory
     ) {
-        $this->resourceConnection                            = $resourceConnection;
-        $this->customDescription                             = $customDescription;
-        $this->customDescriptionModel                        = $customDescriptionModel;
         $this->customDescriptionInterface                    = $customDescriptionInterface;
+        $this->customDescriptionFactory                      = $customDescriptionFactory;
+        $this->customDescriptionSearchResultInterfaceFactory = $customDescriptionSearchResultInterfaceFactory;
+        $this->collectionProcessor                           = $collectionProcessor;
+        $this->customDescriptionResourceModel                = $customDescriptionResourceModel;
+        $this->collectionFactory                             = $collectionFactory;
     }
 
     /**
@@ -57,16 +79,11 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      *
      * @param CustomDescriptionInterface $customDescription
      * @return void
+     * @throws AlreadyExistsException
      */
     public function save(CustomDescriptionInterface $customDescription)
     {
-        $currentIsAllowedDescription = $customDescription->getIsAllowedDescription();
-        $customerEmail = $customDescription->getCustomerEmail();
-        $connection = $this->resourceConnection->getConnection();
-        $tableName  = $connection->getTableName('allow_add_description');
-        $insertData =
-            ["is_allowed_description" => $currentIsAllowedDescription, 'customer_email' => $customerEmail];
-        $connection->insertOnDuplicate($tableName, $insertData);
+        $this->customDescriptionResourceModel->save($customDescription);
     }
 
     /**
@@ -74,19 +91,46 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      *
      * @param string $customerEmail
      * @return CustomDescriptionInterface
+     * @throws NoSuchEntityException
      */
     public function getByEmail(string $customerEmail): CustomDescriptionInterface
     {
-        $object = $this->customDescriptionModel;
-        $this->customDescription->load($object, $customerEmail, 'customer_email');
-        if (empty($object->getData())) {
-            $object->setIsAllowedDescription(false);
-            $object->setCustomerEmail($customerEmail);
+        $object = $this->customDescriptionFactory->create();
+        $this->customDescriptionResourceModel->load($object, $customerEmail, 'customer_email');
+        if (empty($object->getId() ?? $customerEmail)) {
+            throw new NoSuchEntityException(
+                __(
+                    'Customer with email "%1" does not exist.',
+                    $customerEmail
+                )
+            );
         }
         $customDescriptionInterface = $this->customDescriptionInterface;
-        $customDescriptionInterface->setCustomerEmail($object->getData()['customer_email']);
-        $customDescriptionInterface->setIsAllowedDescription((bool)$object->getData()['is_allowed_description']) ?? '';
+        $customDescriptionInterface->setCustomerEmail($customerEmail);
+        $customDescriptionInterface->setIsAllowedDescription(
+            $object->getIsAllowedDescription()
+            ?? false
+        );
 
         return $customDescriptionInterface;
+    }
+
+    /**
+     * Get list of allow descriptions
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return CustomDescriptionSearchResultInterface $searchResult
+     */
+    public function getList(SearchCriteriaInterface $searchCriteria): CustomDescriptionSearchResultInterface
+    {
+        $collection = $this->collectionFactory->create();
+        $this->collectionProcessor->process($searchCriteria, $collection);
+
+        $searchResult = $this->customDescriptionSearchResultInterfaceFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
+
+        return $searchResult;
     }
 }
