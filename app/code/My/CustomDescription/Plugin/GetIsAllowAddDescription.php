@@ -27,18 +27,18 @@ class GetIsAllowAddDescription
     /**
      * Plugin constructor.
      *
-     * @param SearchCriteriaInterface $searchCriteriaInterface
+     * @param SearchCriteriaInterface              $searchCriteriaInterface
      * @param CustomDescriptionRepositoryInterface $customDescriptionRepository
-     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilder
+     * @param SearchCriteriaBuilderFactory         $searchCriteriaBuilder
      */
     public function __construct(
         SearchCriteriaInterface $searchCriteriaInterface,
         CustomDescriptionRepositoryInterface $customDescriptionRepository,
         SearchCriteriaBuilderFactory $searchCriteriaBuilder
     ) {
-        $this->searchCriteriaInterface = $searchCriteriaInterface;
+        $this->searchCriteriaInterface     = $searchCriteriaInterface;
         $this->customDescriptionRepository = $customDescriptionRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->searchCriteriaBuilder       = $searchCriteriaBuilder;
     }
 
     /**
@@ -46,35 +46,39 @@ class GetIsAllowAddDescription
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param DataProviderWithDefaultAddresses $subject
-     * @param array $data
+     * @param array                            $data
      * @return array
      * @throws NoSuchEntityException
      */
     public function afterGetData(DataProviderWithDefaultAddresses $subject, array $data): array
     {
-        foreach ($data as $customerData) {
+        if (!empty($data)) {
             $customerEmails = [];
-            $customerEmail = $customerData['customer']['email'];
-            $customerEmails[$customerEmail] = $customerEmail;
-        }
-        $customerCriteriaBuilder = $this->searchCriteriaBuilder->create();
-        $customerCriteriaBuilder->addFilter('customer_email', $customerEmails, 'in');
-        $customerSearchCriteria = $customerCriteriaBuilder->create();
-        $descriptions = $this->customDescriptionRepository->getList($customerSearchCriteria)->getItems();
-        array_walk(
-            $descriptions,
-            static function ($description) use (&$result) {
-                $result[$description->getCustomerEmail()] = $description->getCustomerEmail();
+            foreach ($data as $customerData) {
+                $customerEmail                  = $customerData['customer']['email'];
+                $customerEmails[$customerEmail] = $customerEmail;
             }
-        );
-        foreach ($data as &$customerData) {
-            $email = $customerData['customer']['email'] ?? null;
-            if ($email && isset($result[$email])) {
-                $isAllowed = $this->customDescriptionRepository->getByEmail($email);
-                $customerData['customer']['extension_attributes']['is_allowed_description'] =
-                    (string)(int)$isAllowed->getIsAllowedDescription();
+            $customerCriteriaBuilder = $this->searchCriteriaBuilder->create();
+            $customerCriteriaBuilder->addFilter('customer_email', $customerEmails, 'in');
+            $customerSearchCriteria = $customerCriteriaBuilder->create();
+            $descriptions           = $this->customDescriptionRepository->getList($customerSearchCriteria)->getItems();
+            array_walk(
+                $descriptions,
+                static function ($description) use (&$result) {
+                    $result[$description->getCustomerEmail()] = $description->getIsAllowedDescription();
+                }
+            );
+            foreach ($data as &$customerData) {
+                $email = $customerData['customer']['email'] ?? null;
+                if ($email && isset($result[$email])) {
+                    $isAllowed                                                                  =
+                        $result[$email];
+                    $customerData['customer']['extension_attributes']['is_allowed_description'] =
+                        (string) (int) $isAllowed;
+                }
             }
         }
+
         return $data;
     }
 }

@@ -1,18 +1,16 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace My\CustomDescription\Model;
 
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use My\CustomDescription\Api\CustomDescriptionRepositoryInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterfaceFactory;
 use My\CustomDescription\Model\ResourceModel\CustomDescription;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use My\CustomDescription\Model\ResourceModel\CustomDescriptions\CollectionFactory;
 
 /**
@@ -24,11 +22,6 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      * @var CustomDescriptionFactory
      */
     private $customDescriptionFactory;
-
-    /**
-     * @var CustomDescriptionInterface
-     */
-    private $customDescriptionInterface;
 
     /**
      * @var CustomDescription
@@ -51,7 +44,6 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
     private $collectionFactory;
 
     /**
-     * @param CustomDescriptionInterface                    $customDescriptionInterface
      * @param CustomDescriptionFactory                      $customDescriptionFactory
      * @param CustomDescriptionSearchResultInterfaceFactory $customDescriptionSearchResultInterfaceFactory
      * @param CollectionProcessorInterface                  $collectionProcessor
@@ -59,14 +51,12 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      * @param CollectionFactory                             $collectionFactory
      */
     public function __construct(
-        CustomDescriptionInterface $customDescriptionInterface,
         CustomDescriptionFactory $customDescriptionFactory,
         CustomDescriptionSearchResultInterfaceFactory $customDescriptionSearchResultInterfaceFactory,
         CollectionProcessorInterface $collectionProcessor,
         CustomDescription $customDescriptionResourceModel,
         CollectionFactory $collectionFactory
     ) {
-        $this->customDescriptionInterface                    = $customDescriptionInterface;
         $this->customDescriptionFactory                      = $customDescriptionFactory;
         $this->customDescriptionSearchResultInterfaceFactory = $customDescriptionSearchResultInterfaceFactory;
         $this->collectionProcessor                           = $collectionProcessor;
@@ -81,7 +71,7 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      * @return void
      * @throws AlreadyExistsException
      */
-    public function save(CustomDescriptionInterface $customDescription)
+    public function save(CustomDescriptionInterface $customDescription): void
     {
         $this->customDescriptionResourceModel->save($customDescription);
     }
@@ -90,29 +80,13 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      * Get CustomDescriptionInterface by customer email
      *
      * @param string $customerEmail
-     * @return CustomDescriptionInterface
-     * @throws NoSuchEntityException
+     * @return bool
      */
-    public function getByEmail(string $customerEmail): CustomDescriptionInterface
+    public function getByEmail(string $customerEmail): bool
     {
         $object = $this->customDescriptionFactory->create();
         $this->customDescriptionResourceModel->load($object, $customerEmail, 'customer_email');
-        if (empty($object->getId() ?? $customerEmail)) {
-            throw new NoSuchEntityException(
-                __(
-                    'Customer with email "%1" does not exist.',
-                    $customerEmail
-                )
-            );
-        }
-        $customDescriptionInterface = $this->customDescriptionInterface;
-        $customDescriptionInterface->setCustomerEmail($customerEmail);
-        $customDescriptionInterface->setIsAllowedDescription(
-            $object->getIsAllowedDescription()
-            ?? false
-        );
-
-        return $customDescriptionInterface;
+        return $object->getIsAllowedDescription() ?? false;
     }
 
     /**

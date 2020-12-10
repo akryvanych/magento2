@@ -8,6 +8,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use My\CustomDescription\Api\CustomDescriptionRepositoryInterface;
+use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 
 /**
  * Save is allow add description in custom db.
@@ -19,13 +20,23 @@ class AfterSaveIsAllowAddDescription
     private $customDescriptionRepository;
 
     /**
-     * CustomDescriptionRepository
+     * @var CustomDescriptionInterface
+     */
+    private $customDescriptionInterface;
+
+    /**
+     * Plugin Constructor
      *
      * @param CustomDescriptionRepositoryInterface $customDescriptionRepository
+     * @param CustomDescriptionInterface $customDescriptionInterface
+     *
      */
-    public function __construct(CustomDescriptionRepositoryInterface $customDescriptionRepository)
-    {
+    public function __construct(
+        CustomDescriptionRepositoryInterface $customDescriptionRepository,
+        CustomDescriptionInterface $customDescriptionInterface
+    ) {
         $this->customDescriptionRepository = $customDescriptionRepository;
+        $this->customDescriptionInterface  = $customDescriptionInterface;
     }
 
     /**
@@ -44,11 +55,12 @@ class AfterSaveIsAllowAddDescription
         CustomerInterface $result,
         CustomerInterface $customer
     ): CustomerInterface {
-        $customerEmail = $result->getEmail();
-        $customDescriptionInterface = $this->customDescriptionRepository->getByEmail($customerEmail);
-        $customerIsAllowedDescription =
-            $customer->getExtensionAttributes()->getIsAllowedDescription() ?? false;
-        $customDescriptionInterface->setIsAllowedDescription((bool)$customerIsAllowedDescription);
+        $customDescriptionInterface   = $this->customDescriptionInterface;
+        $customerEmail                = $customer->getEmail();
+        $customerIsAllowedDescription = $customer->getExtensionAttributes()->getIsAllowedDescription() ??
+            $this->customDescriptionRepository->getByEmail($customerEmail);
+        $customDescriptionInterface->setIsAllowedDescription((bool) $customerIsAllowedDescription);
+        $customDescriptionInterface->setCustomerEmail($customerEmail);
         $this->customDescriptionRepository->save($customDescriptionInterface);
 
         return $result;

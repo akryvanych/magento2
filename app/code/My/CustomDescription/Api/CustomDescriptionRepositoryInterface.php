@@ -1,10 +1,9 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace My\CustomDescription\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface;
 
@@ -18,10 +17,9 @@ interface CustomDescriptionRepositoryInterface
      * Get CustomDescriptionInterface by email
      *
      * @param string $customerEmail
-     * @return CustomDescriptionInterface
-     * @throws NoSuchEntityException
+     * @return bool
      */
-    public function getByEmail(string $customerEmail): CustomDescriptionInterface;
+    public function getByEmail(string $customerEmail): bool;
 
     /**
      * Get list of items in CustomDescriptionInterface
@@ -30,4 +28,12 @@ interface CustomDescriptionRepositoryInterface
      * @return CustomDescriptionSearchResultInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria): CustomDescriptionSearchResultInterface;
+
+    /**
+     * Save extension_attribute in db
+     *
+     * @param CustomDescriptionInterface $customDescription
+     * @return void
+     */
+    public function save(CustomDescriptionInterface $customDescription): void;
 }
