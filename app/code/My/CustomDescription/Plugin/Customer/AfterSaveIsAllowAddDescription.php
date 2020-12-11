@@ -5,10 +5,9 @@ namespace My\CustomDescription\Plugin\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use My\CustomDescription\Api\CustomDescriptionRepositoryInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
+use My\CustomDescription\Model\CustomDescriptionFactory;
 
 /**
  * Save is allow add description in custom db.
@@ -24,19 +23,25 @@ class AfterSaveIsAllowAddDescription
      */
     private $customDescriptionInterface;
 
+    /** @var CustomDescriptionFactory */
+    private $customDescriptionFactory;
+
     /**
      * Plugin Constructor
      *
      * @param CustomDescriptionRepositoryInterface $customDescriptionRepository
      * @param CustomDescriptionInterface $customDescriptionInterface
+     * @param CustomDescriptionFactory $customDescriptionFactory
      *
      */
     public function __construct(
         CustomDescriptionRepositoryInterface $customDescriptionRepository,
-        CustomDescriptionInterface $customDescriptionInterface
+        CustomDescriptionInterface $customDescriptionInterface,
+        CustomDescriptionFactory $customDescriptionFactory
     ) {
         $this->customDescriptionRepository = $customDescriptionRepository;
         $this->customDescriptionInterface  = $customDescriptionInterface;
+        $this->customDescriptionFactory = $customDescriptionFactory;
     }
 
     /**
@@ -47,15 +52,13 @@ class AfterSaveIsAllowAddDescription
      * @param CustomerInterface           $result
      * @param CustomerInterface           $customer
      * @return CustomerInterface
-     * @throws NoSuchEntityException
-     * @throws AlreadyExistsException
      */
     public function afterSave(
         CustomerRepositoryInterface $subject,
         CustomerInterface $result,
         CustomerInterface $customer
     ): CustomerInterface {
-        $customDescriptionInterface   = $this->customDescriptionInterface;
+        $customDescriptionInterface   = $this->customDescriptionFactory->create();
         $customerEmail                = $customer->getEmail();
         $customerIsAllowedDescription = $customer->getExtensionAttributes()->getIsAllowedDescription() ??
             $this->customDescriptionRepository->getByEmail($customerEmail);
