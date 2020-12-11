@@ -11,9 +11,13 @@
         <plugin name="addIsAllowDescriptionToDataProvider"
                 type="My\CustomDescription\Plugin\GetIsAllowAddDescription"/>
     </type>
-    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+    <type name="Magento\Customer\Model\ResourceModel\CustomerRepository">
         <plugin name="SaveIsAllowDescriptionAfterCustomerSave"
                 type="My\CustomDescription\Plugin\Customer\AfterSaveIsAllowAddDescription"/>
+        <plugin name="AfterGetIsAllowDescription"
+                type="My\CustomDescription\Plugin\Customer\AfterGetAddAllowAddDescription"/>
+        <plugin name="AfterGetByIdIsAllowDescription"
+                type="My\CustomDescription\Plugin\Customer\AfterGetByIdAddAllowDescription"/>
     </type>
     <type name="Magento\Customer\Model\ResourceModel\Grid\Collection">
         <plugin name="AddAllowAddDescriptionToCustomerGrid"
