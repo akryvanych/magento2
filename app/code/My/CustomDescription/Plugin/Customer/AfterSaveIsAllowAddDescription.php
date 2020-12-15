@@ -62,10 +62,12 @@ class AfterSaveIsAllowAddDescription
         $customerEmail                = $customer->getEmail();
         $customerIsAllowedDescription = $customer->getExtensionAttributes()->getIsAllowedDescription() ??
             false;
+        if ($customerIsAllowedDescription === null) {
+            $customerIsAllowedDescription = false;
+        }
         $customDescriptionInterface->setIsAllowedDescription((bool) $customerIsAllowedDescription);
         $customDescriptionInterface->setCustomerEmail($customerEmail);
         $this->customDescriptionRepository->save($customDescriptionInterface);
-
         return $result;
     }
 }

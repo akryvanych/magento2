@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace My\CustomDescription\Plugin\Customer;
 
+use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 
@@ -12,17 +13,17 @@ use Magento\Customer\Api\Data\CustomerInterface;
 class AfterGetAddAllowAddDescription
 {
     /**
-     * @var GetCustomData
+     * @var AddExtensionAttributes
      */
-    private $getCustomData;
+    private $addExtensionAttributes;
 
     /**
-     * @param GetCustomData $getCustomData
+     * @param AddExtensionAttributes $addExtensionAttributes
      */
     public function __construct(
-        GetCustomData $getCustomData
+        AddExtensionAttributes $addExtensionAttributes
     ) {
-        $this->getCustomData = $getCustomData;
+        $this->addExtensionAttributes = $addExtensionAttributes;
     }
 
     /**
@@ -31,12 +32,13 @@ class AfterGetAddAllowAddDescription
      * @param CustomerRepositoryInterface $subject
      * @param CustomerInterface           $customer
      * @return CustomerInterface
+     * @throws Exception
      */
     public function afterGet(
         CustomerRepositoryInterface $subject,
         CustomerInterface $customer
     ): CustomerInterface {
-        $this->getCustomData->getCustomerData($customer);
+        $this->addExtensionAttributes->getCustomerData($customer);
         return $customer;
     }
 }

@@ -48,14 +48,13 @@ class GetIsAllowAddDescription
      * @param DataProviderWithDefaultAddresses $subject
      * @param array                            $data
      * @return array
-     * @throws NoSuchEntityException
      */
     public function afterGetData(DataProviderWithDefaultAddresses $subject, array $data): array
     {
         if (!empty($data)) {
             $customerEmails = [];
             foreach ($data as $customerData) {
-                $customerEmail                  = $customerData['customer']['email'];
+                $customerEmail                  = $customerData['customer']['email'] ?? null;
                 $customerEmails[$customerEmail] = $customerEmail;
             }
             $customerCriteriaBuilder = $this->searchCriteriaBuilder->create();
@@ -70,9 +69,8 @@ class GetIsAllowAddDescription
             );
             foreach ($data as &$customerData) {
                 $email = $customerData['customer']['email'] ?? null;
-                if ($email && isset($result[$email])) {
-                    $isAllowed                                                                  =
-                        $result[$email];
+                if (isset($result[$email])) {
+                    $isAllowed = $result[$email];
                     $customerData['customer']['extension_attributes']['is_allowed_description'] =
                         (string) (int) $isAllowed;
                 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace My\CustomDescription\Model;
 
+use Exception;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -81,11 +82,15 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      *
      * @param string $customerEmail
      * @return bool
+     * @throws Exception
      */
     public function getByEmail(string $customerEmail): bool
     {
         $object = $this->customDescriptionFactory->create();
         $this->customDescriptionResourceModel->load($object, $customerEmail, 'customer_email');
+        if (!isset($object)) {
+            throw new Exception('Object not found.');
+        }
         return $object->getIsAllowedDescription() ?? false;
     }
 
@@ -93,7 +98,7 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      * Get list of allow descriptions
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return CustomDescriptionSearchResultInterface $searchResult
+     * @return CustomDescriptionSearchResultInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria): CustomDescriptionSearchResultInterface
     {
