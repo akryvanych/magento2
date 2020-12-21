@@ -1,0 +1,29 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="custom_product_description" resource="default" engine="innodb"
+           comment="Custom Product Description Table">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Table primary Key"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false"
+                comment="Product Id"/>
+        <column xsi:type="varchar" name="customer_email" nullable="false" comment="Customer email foreign key"/>
+        <column xsi:type="text" name="custom_customer_description_to_product"
+                comment="Customer description to product"/>
+        <column xsi:type="boolean" name="is_approved" comment="Is approved additional comment"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign"
+                    referenceId="CUSTOM_PRODUCT_DESCRIPTION_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
+                    table="custom_product_description" column="product_id" referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign"
+                    referenceId="CUSTOM_PRODUCT_DESCRIPTION_CUSTOMER_EMAIL_CUSTOMER_ENTITY_EMAIL"
+                    table="custom_product_description" column="customer_email" referenceTable="customer_entity"
+                    referenceColumn="email" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign"
+                    referenceId="CUSTOM_PRODUCT_DESCRIPTION_CUSTOMER_EMAIL_ALLOW_ADD_DESCRIPTION_CUSTOMER_EMAIL"
+                    table="custom_product_description" column="customer_email" referenceTable="allow_add_description"
+                    referenceColumn="customer_email" onDelete="CASCADE"/>
+    </table>
+</schema>

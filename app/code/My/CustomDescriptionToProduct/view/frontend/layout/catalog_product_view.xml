@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.info.details">
+            <block class="My\CustomDescriptionToProduct\Block\ExtraReview" name="additional.reviews.tab"
+                   as="additional_reviews"
+                   template="My_CustomDescriptionToProduct::additionalreviews.phtml" group="detailed_info" cacheable="false">
+                <arguments>
+                    <argument name="sort_order" xsi:type="string">40</argument>
+                </arguments>
+                <block class="My\CustomDescriptionToProduct\Block\Form" name="additional.review.form"
+                       template="My_CustomDescriptionToProduct::form.phtml" cacheable="false"/>
+                <block class="My\CustomDescriptionToProduct\Block\CommentsList" name="additional.review.list"
+                       template="My_CustomDescriptionToProduct::commentslist.phtml" cacheable="false"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

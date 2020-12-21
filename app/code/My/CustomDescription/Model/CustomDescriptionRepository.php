@@ -7,6 +7,7 @@ use Exception;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\NotFoundException;
 use My\CustomDescription\Api\CustomDescriptionRepositoryInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionSearchResultInterface;
@@ -88,9 +89,6 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
     {
         $object = $this->customDescriptionFactory->create();
         $this->customDescriptionResourceModel->load($object, $customerEmail, 'customer_email');
-        if (!isset($object)) {
-            throw new Exception('Object not found.');
-        }
         return $object->getIsAllowedDescription() ?? false;
     }
 

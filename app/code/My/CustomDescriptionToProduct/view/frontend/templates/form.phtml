@@ -1,0 +1,20 @@
+<?php /** @var $block \My\CustomDescriptionToProduct\Block\Form */ ?>
+<h2><b>Your additional comment:</b></h2>
+<?php /* @noEscape */
+try {
+    if ($block->checkIsAllow() === true) { ?>
+        <form action="customReview/index/index">
+            <textarea id="extraComment" aria-label="additionalComment" aria-required="true" cols="5" rows="3"
+                      class="myTextarea" name="additionalComment"></textarea>
+            <?php echo $block->getAdditionalInfo() ?>
+            <input type="submit" class="button" value="Submit"/>
+        </form>
+        <?php
+    } else {
+        echo 'You have not permissions to add additional comment.';
+    }
+} catch (Exception $e) {
+    echo 'You have not permissions to add additional comment.';
+}
+?>
+<br/>
