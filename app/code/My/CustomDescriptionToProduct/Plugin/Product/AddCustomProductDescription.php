@@ -41,10 +41,7 @@ class AddCustomProductDescription
      */
     public function addCustomProductDescription(ProductInterface $product): AddCustomProductDescription
     {
-        $extensionAttributes = $product->getExtensionAttributes();
-        if (empty($extensionAttributes)) {
-            $extensionAttributes = $this->productExtensionFactory->create();
-        }
+        $extensionAttributes = $product->getExtensionAttributes() ?? $this->productExtensionFactory->create();
         if ($product->getId() != null) {
             $customDescriptions = $this->descriptionRepository->getById((int)$product->getId());
             $extensionAttributes->setCustomProductDescription($customDescriptions);
