@@ -5,18 +5,16 @@ namespace My\CustomDescriptionToProduct\Controller\Index;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Webapi\Rest\Request;
 use My\CustomDescriptionToProduct\Api\CustomDescriptionToProductRepositoryInterface as CustomCommentRepository;
-
 use My\CustomDescriptionToProduct\Model\CustomDescriptionToProductFactory;
 
 /**
  * Sets extra comment to db and save.
- *
- * @SuppressWarnings(PHPMD)
  */
-class Index extends Action
+class Index extends Action implements HttpGetActionInterface
 {
     /**
      * @var Request
@@ -54,11 +52,11 @@ class Index extends Action
         CustomCommentRepository $commentRepository,
         CustomDescriptionToProductFactory $customDescriptionToProductFactory
     ) {
-        parent::__construct($context);
         $this->resultFactory = $resultFactory;
         $this->request = $request;
         $this->commentRepository = $commentRepository;
         $this->customDescriptionToProductFactory = $customDescriptionToProductFactory;
+        parent::__construct($context);
     }
 
     /**
