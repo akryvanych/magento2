@@ -61,7 +61,7 @@ class Disapprove extends Action implements HttpGetActionInterface
             $commentId                  = $this->request->getParam('comment_id') ?? null;
             $comment                    = $this->customReviewRepository->getCommentByCommentId($commentId);
             $customDescriptionInterface->setData($comment[$commentId]->getData());
-            $customDescriptionInterface->setIsApproved(0);
+            $customDescriptionInterface->setIsApproved(false);
             $this->customReviewRepository->save($customDescriptionInterface);
             if ($commentId == null) {
                 $this->messageManager->addSuccessMessage(__('Comment was change successfully!'));

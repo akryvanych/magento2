@@ -61,7 +61,7 @@ class Approve extends Action implements HttpGetActionInterface
             $commentId                  = $this->request->getParam('comment_id') ?? null;
             $comment                    = $this->customReviewRepository->getCommentByCommentId($commentId);
             $customDescriptionInterface->setData($comment[$commentId]->getData());
-            $customDescriptionInterface->setIsApproved(1);
+            $customDescriptionInterface->setIsApproved(true);
             $this->customReviewRepository->save($customDescriptionInterface);
             if ($commentId == null) {
                 $this->messageManager->addSuccessMessage(__('Comment was approved successfully!'));
