@@ -27,9 +27,10 @@ class AfterGetListCustomProductDescription
     /**
      * Add Custom Description after get product list
      *
-     * @param ProductRepositoryInterface $subject
-     * @param SearchResults            $searchResult
+     * @param  ProductRepositoryInterface $subject
+     * @param  SearchResults              $searchResult
      * @return SearchResults
+     * @SuppressWarnings("unused")
      */
     public function afterGetList(
         ProductRepositoryInterface $subject,

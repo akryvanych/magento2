@@ -84,6 +84,7 @@ class CustomDescriptionRepository implements CustomDescriptionRepositoryInterfac
      * @param string $customerEmail
      * @return bool
      * @throws Exception
+     * @SuppressWarnings(PHPMD)
      */
     public function getByEmail(string $customerEmail): bool
     {

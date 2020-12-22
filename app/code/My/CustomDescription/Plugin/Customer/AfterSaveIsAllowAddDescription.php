@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace My\CustomDescription\Plugin\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerExtensionFactory;
 use Magento\Customer\Api\Data\CustomerInterface;
 use My\CustomDescription\Api\CustomDescriptionRepositoryInterface;
 use My\CustomDescription\Api\Data\CustomDescriptionInterface;
@@ -15,7 +16,9 @@ use My\CustomDescription\Model\CustomDescriptionFactory;
 class AfterSaveIsAllowAddDescription
 {
 
-    /** @var CustomDescriptionRepositoryInterface */
+    /**
+     * @var CustomDescriptionRepositoryInterface
+     */
     private $customDescriptionRepository;
 
     /**
@@ -23,7 +26,14 @@ class AfterSaveIsAllowAddDescription
      */
     private $customDescriptionInterface;
 
-    /** @var CustomDescriptionFactory */
+    /**
+     * @var CustomerExtensionFactory
+     */
+    private $customerExtensionFactory;
+
+    /**
+     * @var CustomDescriptionFactory
+     */
     private $customDescriptionFactory;
 
     /**
@@ -31,17 +41,20 @@ class AfterSaveIsAllowAddDescription
      *
      * @param CustomDescriptionRepositoryInterface $customDescriptionRepository
      * @param CustomDescriptionInterface $customDescriptionInterface
+     * @param CustomerExtensionFactory $customerExtensionFactory
      * @param CustomDescriptionFactory $customDescriptionFactory
      *
      */
     public function __construct(
         CustomDescriptionRepositoryInterface $customDescriptionRepository,
         CustomDescriptionInterface $customDescriptionInterface,
+        CustomerExtensionFactory $customerExtensionFactory,
         CustomDescriptionFactory $customDescriptionFactory
     ) {
         $this->customDescriptionRepository = $customDescriptionRepository;
         $this->customDescriptionInterface  = $customDescriptionInterface;
-        $this->customDescriptionFactory = $customDescriptionFactory;
+        $this->customerExtensionFactory    = $customerExtensionFactory;
+        $this->customDescriptionFactory    = $customDescriptionFactory;
     }
 
     /**
@@ -61,10 +74,7 @@ class AfterSaveIsAllowAddDescription
         $customDescriptionInterface   = $this->customDescriptionFactory->create();
         $customerEmail                = $customer->getEmail();
         $customerIsAllowedDescription = $customer->getExtensionAttributes()->getIsAllowedDescription() ??
-            false;
-        if ($customerIsAllowedDescription === null) {
-            $customerIsAllowedDescription = false;
-        }
+            $this->customerExtensionFactory->create()->setIsAllowedDescription(false);
         $customDescriptionInterface->setIsAllowedDescription((bool) $customerIsAllowedDescription);
         $customDescriptionInterface->setCustomerEmail($customerEmail);
         $this->customDescriptionRepository->save($customDescriptionInterface);

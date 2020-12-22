@@ -58,7 +58,7 @@ class Approve extends Action implements HttpGetActionInterface
         $resultRedirect = $this->resultRedirectFactory->create();
         try {
             $customDescriptionInterface = $this->customDescriptionToProductFactory->create();
-            $commentId                  = $this->request->getParam('entity_id') ?? null;
+            $commentId                  = $this->request->getParam('comment_id') ?? null;
             $comment                    = $this->customReviewRepository->getCommentByCommentId($commentId);
             $customDescriptionInterface->setData($comment[$commentId]->getData());
             $customDescriptionInterface->setIsApproved(1);

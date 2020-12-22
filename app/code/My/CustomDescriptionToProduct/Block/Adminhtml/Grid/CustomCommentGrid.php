@@ -62,7 +62,7 @@ class CustomCommentGrid extends Extended
     protected function _construct()
     {
         parent::_construct();
-        $this->setDefaultSort('entity_id');
+        $this->setDefaultSort('comment_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
     }
@@ -79,7 +79,6 @@ class CustomCommentGrid extends Extended
         $extraCommentCollection = $this->additionalCommentCollectionFactory->create()->addFieldToSelect('*');
         $extraCommentCollection->addFieldToFilter('product_id', $productId);
         $this->setCollection($extraCommentCollection);
-        $test = $extraCommentCollection->getItems();
         return parent::_prepareCollection();
     }
 
@@ -92,12 +91,12 @@ class CustomCommentGrid extends Extended
     protected function _prepareColumns(): Extended
     {
         $this->addColumn(
-            'entity_id',
+            'comment_id',
             [
                 'header'           => __('Comment Id'),
                 'type'             => 'number',
-                'filter_index'     => 'entity_id',
-                'index'            => 'entity_id',
+                'filter_index'     => 'comment_id',
+                'index'            => 'comment_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id',
             ]
@@ -146,27 +145,27 @@ class CustomCommentGrid extends Extended
                 'header' => __('Actions'),
                 'width' => '100px',
                 'type' => 'action',
-                'getter' => 'getEntityId',
+                'getter' => 'getCommentId',
                 'actions' => [
                     [
                         'caption' => __('Delete'),
                         'url' => ['base' => 'customgrid/index/delete'],
-                        'field' => 'entity_id'
+                        'field' => 'comment_id'
                     ],
                     [
                         'caption' => __('Approve'),
                         'url' => ['base' => 'customgrid/index/approve'],
-                        'field' => 'entity_id'
+                        'field' => 'comment_id'
                     ],
                     [
                         'caption' => __('Disapprove'),
                         'url' => ['base' => 'customgrid/index/disapprove'],
-                        'field' => 'entity_id'
+                        'field' => 'comment_id'
                     ],
                 ],
                 'filter' => false,
                 'sortable' => false,
-                'index' => 'entity_id',
+                'index' => 'comment_id',
                 'is_system' => true,
             ]
         );

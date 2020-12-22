@@ -14,17 +14,17 @@ class CustomDescriptionToProduct extends AbstractExtensibleModel implements Cust
     /**
      * @inheritdoc
      */
-    public function getEntityId(): int
+    public function getCommentId(): int
     {
-        return (int) $this->getData(self::ENTITY_ID);
+        return (int) $this->getData(self::COMMENT_ID);
     }
 
     /**
      * @inheritdoc
      */
-    public function setEntityId($entityId)
+    public function setCommentId(int $commentId): CustomDescriptionToProduct
     {
-        return $this->setData(self::ENTITY_ID, $entityId);
+        return $this->setData(self::COMMENT_ID, $commentId);
     }
 
     /**
@@ -79,7 +79,7 @@ class CustomDescriptionToProduct extends AbstractExtensibleModel implements Cust
     /**
      * @inheritDoc
      */
-    public function setIsApproved($isApproved): CustomDescriptionToProductInterface
+    public function setIsApproved(bool $isApproved): CustomDescriptionToProductInterface
     {
         return $this->setData(self::IS_APPROVED, $isApproved);
     }

@@ -2,7 +2,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="custom_product_description" resource="default" engine="innodb"
            comment="Custom Product Description Table">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="comment_id" padding="10" unsigned="true" nullable="false" identity="true"
                 comment="Table primary Key"/>
         <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false"
                 comment="Product Id"/>
@@ -11,10 +11,10 @@
                 comment="Customer description to product"/>
         <column xsi:type="boolean" name="is_approved" comment="Is approved additional comment"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="entity_id"/>
+            <column name="comment_id"/>
         </constraint>
         <constraint xsi:type="foreign"
-                    referenceId="CUSTOM_PRODUCT_DESCRIPTION_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID"
+                    referenceId="CUSTOM_PRODUCT_DESCRIPTION_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_COMMENT_ID"
                     table="custom_product_description" column="product_id" referenceTable="catalog_product_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign"

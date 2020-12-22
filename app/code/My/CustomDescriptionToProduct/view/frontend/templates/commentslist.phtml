@@ -9,14 +9,14 @@ use My\CustomDescriptionToProduct\Block\CommentsList;
 <div>
     <?php /* @noEscape */
     if ($block->checkIsEmpty() != 'empty') {
-        foreach ($block->getCommentList() as $comment): ?>
+        foreach ($block->getCommentList() as $comment) : ?>
         <div class="extra-comment" style="border-style: double;">
             <p><b>Name:</b>
-                <?= $block->getCustomerName($comment['customer_email']) ?>
+                <?= /* @noEscape */ $block->getCustomerName($comment['customer_email']) ?>
             </p>
             <b>Comment:</b>
             <span class="extra-comment-child">
-                <?= $comment['custom_customer_description_to_product'] ?>
+                <?= /* @noEscape */ $comment['custom_customer_description_to_product'] ?>
             </span>
             <br/>
         </div>

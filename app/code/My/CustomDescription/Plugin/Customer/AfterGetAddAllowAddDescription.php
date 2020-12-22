@@ -33,6 +33,7 @@ class AfterGetAddAllowAddDescription
      * @param CustomerInterface           $customer
      * @return CustomerInterface
      * @throws Exception
+     * @SuppressWarnings("unused")
      */
     public function afterGet(
         CustomerRepositoryInterface $subject,

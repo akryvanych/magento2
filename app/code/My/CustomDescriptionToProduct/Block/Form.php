@@ -45,8 +45,8 @@ class Form extends Template
      * @param CustomDescriptionRepository $customDescriptionRepository
      * @param UserContextInterface        $userContextInterface
      * @param CustomerRepositoryInterface $customerRepository
-     * @param array                       $data
      * @param Registry                    $coreRegistry
+     * @param array                       $data
      */
     public function __construct(
         Context $context,

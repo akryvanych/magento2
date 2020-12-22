@@ -41,8 +41,8 @@ interface CustomDescriptionInterface extends ExtensibleDataInterface
     /**
      * Get Is Allowed
      *
-     * @SuppressWarnings("unchecked")
      * @return bool
+     * @SuppressWarnings(PHPMD)
      */
     public function getIsAllowedDescription() : bool;
 }

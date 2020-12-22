@@ -19,7 +19,7 @@
                 <item name="My\CustomDescriptionToProduct\Api\Data\CustomDescriptionToProductInterface"
                       xsi:type="array">
                     <item name="entityTableName" xsi:type="string">custom_product_description</item>
-                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="identifierField" xsi:type="string">comment_id</item>
                 </item>
             </argument>
         </arguments>

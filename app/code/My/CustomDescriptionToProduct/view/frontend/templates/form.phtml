@@ -6,7 +6,7 @@ try {
         <form action="customReview/index/index">
             <textarea id="extraComment" aria-label="additionalComment" aria-required="true" cols="5" rows="3"
                       class="myTextarea" name="additionalComment"></textarea>
-            <?php echo $block->getAdditionalInfo() ?>
+            <?= /* @noEscape */ $block->getAdditionalInfo() ?>
             <input type="submit" class="button" value="Submit"/>
         </form>
         <?php

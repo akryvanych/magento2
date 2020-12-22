@@ -3,18 +3,15 @@ declare(strict_types=1);
 
 namespace My\CustomDescriptionToProduct\Controller\Index;
 
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Webapi\Rest\Request;
 use My\CustomDescriptionToProduct\Api\CustomDescriptionToProductRepositoryInterface as CustomCommentRepository;
-
 use My\CustomDescriptionToProduct\Model\CustomDescriptionToProductFactory;
 
 /**
  * Sets extra comment to db and save.
  */
-class Index extends Action
+class Index
 {
     /**
      * @var Request
@@ -39,20 +36,17 @@ class Index extends Action
     /**
      * Controller constructor.
      *
-     * @param Context $context
      * @param ResultFactory $resultFactory
      * @param Request $request
      * @param CustomCommentRepository $commentRepository
      * @param CustomDescriptionToProductFactory $customDescriptionToProductFactory
      */
     public function __construct(
-        Context $context,
         ResultFactory $resultFactory,
         Request $request,
         CustomCommentRepository $commentRepository,
         CustomDescriptionToProductFactory $customDescriptionToProductFactory
     ) {
-        parent::__construct($context);
         $this->resultFactory = $resultFactory;
         $this->request = $request;
         $this->commentRepository = $commentRepository;
@@ -61,7 +55,6 @@ class Index extends Action
 
     /**
      * Sets extra comments to db and save.
-     *
      */
     public function execute()
     {

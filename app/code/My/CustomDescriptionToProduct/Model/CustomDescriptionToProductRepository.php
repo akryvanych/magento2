@@ -86,6 +86,13 @@ class CustomDescriptionToProductRepository implements CustomDescriptionToProduct
         $this->customDescriptionResourceModel->save($customDescriptionToProduct);
     }
 
+    /**
+     * Delete CustomDescriptionInterface
+     *
+     * @param CustomDescriptionToProductInterface $customDescriptionToProduct
+     * @return void
+     * @throws Exception
+     */
     public function delete(CustomDescriptionToProductInterface $customDescriptionToProduct): void
     {
         $this->customDescriptionResourceModel->delete($customDescriptionToProduct);
@@ -116,7 +123,7 @@ class CustomDescriptionToProductRepository implements CustomDescriptionToProduct
     public function getCommentByCommentId(string $commentId): array
     {
         $customerCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
-        $customerCriteriaBuilder->addFilter('entity_id', $commentId, 'in');
+        $customerCriteriaBuilder->addFilter('comment_id', $commentId, 'in');
         $customerSearchCriteria = $customerCriteriaBuilder->create();
         return $this->getList($customerSearchCriteria)->getItems();
     }

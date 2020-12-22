@@ -37,6 +37,8 @@ class AddExtensionAttributes
     }
 
     /**
+     * Get Extension attributes data
+     *
      * @param CustomerInterface $customer
      *
      * @return CustomerInterface

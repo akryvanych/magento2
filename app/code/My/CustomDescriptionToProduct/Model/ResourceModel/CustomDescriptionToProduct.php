@@ -15,6 +15,6 @@ class CustomDescriptionToProduct extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('custom_product_description', 'entity_id');
+        $this->_init('custom_product_description', 'comment_id');
     }
 }

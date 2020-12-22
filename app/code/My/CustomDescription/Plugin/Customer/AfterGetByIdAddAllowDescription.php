@@ -34,6 +34,7 @@ class AfterGetByIdAddAllowDescription
      * @param CustomerInterface           $customer
      * @return CustomerInterface
      * @throws Exception
+     * @SuppressWarnings("unused")
      */
     public function afterGetById(
         CustomerRepositoryInterface $subject,

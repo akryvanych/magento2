@@ -5,7 +5,8 @@ namespace My\CustomDescriptionToProduct\Model\ResourceModel\CustomDescriptionsTo
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use My\CustomDescriptionToProduct\Model\CustomDescriptionToProduct;
-use My\CustomDescriptionToProduct\Model\ResourceModel\CustomDescriptionToProduct as CustomDescriptionToProductResourceModel;
+use My\CustomDescriptionToProduct\Model\ResourceModel\CustomDescriptionToProduct as
+    CustomDescriptionToProductResourceModel;
 
 /**
  * Custom description collection.

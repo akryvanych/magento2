@@ -18,6 +18,7 @@ interface CustomDescriptionRepositoryInterface
      *
      * @param string $customerEmail
      * @return bool
+     * @SuppressWarnings(PHPMD)
      */
     public function getByEmail(string $customerEmail): bool;
 

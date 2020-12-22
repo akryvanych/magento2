@@ -11,7 +11,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  */
 interface CustomDescriptionToProductInterface extends ExtensibleDataInterface
 {
-    public const ENTITY_ID = 'entity_id';
+    public const COMMENT_ID = 'comment_id';
 
     public const PRODUCT_ID = 'product_id';
 
@@ -22,19 +22,19 @@ interface CustomDescriptionToProductInterface extends ExtensibleDataInterface
     public const IS_APPROVED = 'is_approved';
 
     /**
-     * Get Entity Id
+     * Get Comment Id
      *
      * @return int
      */
-    public function getEntityId(): int;
+    public function getCommentId(): int;
 
     /**
-     * Set Entity Id
+     * Set Comment Id
      *
-     * @param $entityId
+     * @param int $commentId
      * @return
      */
-    public function setEntityId($entityId);
+    public function setCommentId(int $commentId);
 
     /**
      * Set Product Id
@@ -87,14 +87,15 @@ interface CustomDescriptionToProductInterface extends ExtensibleDataInterface
      * Get Is Approved
      *
      * @return bool
+     * @SuppressWarnings(PHPMD)
      */
     public function getIsApproved(): bool;
 
     /**
      * Set Is Approved
      *
-     * @param $isApproved
+     * @param bool $isApproved
      * @return CustomDescriptionToProductInterface
      */
-    public function setIsApproved($isApproved): CustomDescriptionToProductInterface;
+    public function setIsApproved(bool $isApproved): CustomDescriptionToProductInterface;
 }

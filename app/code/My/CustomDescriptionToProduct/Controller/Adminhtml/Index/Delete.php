@@ -10,6 +10,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Request\Http as Request;
 use My\CustomDescriptionToProduct\Api\CustomDescriptionToProductRepositoryInterface as CustomReviewRepository;
 use My\CustomDescriptionToProduct\Model\CustomDescriptionToProductFactory;
+
 /**
  * Customer additional comments grid delete action.
  */
@@ -57,7 +58,7 @@ class Delete extends Action implements HttpGetActionInterface
         $resultRedirect = $this->resultRedirectFactory->create();
         try {
             $customDescriptionInterface = $this->customDescriptionToProductFactory->create();
-            $commentId                  = $this->request->getParam('entity_id') ?? null;
+            $commentId                  = $this->request->getParam('comment_id') ?? null;
             $comment                    = $this->customReviewRepository->getCommentByCommentId($commentId);
             $customDescriptionInterface->setData($comment[$commentId]->getData());
             $this->customReviewRepository->delete($customDescriptionInterface);

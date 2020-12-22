@@ -29,6 +29,7 @@ class AfterGetCustomProductDescription
      * @param ProductRepositoryInterface $subject
      * @param ProductInterface           $product
      * @return ProductInterface
+     * @SuppressWarnings("unused")
      */
     public function afterGet(
         ProductRepositoryInterface $subject,
